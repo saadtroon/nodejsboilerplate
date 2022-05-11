@@ -1,4 +1,6 @@
 const UserModel = require("../models/UserModel");
+const ShoefyModel = require("../models/ShoefyModel");
+const Listener = require("./ListenerController")
 const { body,validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
@@ -6,9 +8,11 @@ const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
+const fs = require("fs");
+const cron = require("node-cron");
 
+Listener.BSClistener()
 /**
  * User registration.
  *
@@ -21,37 +25,40 @@ const { constants } = require("../helpers/constants");
  */
 exports.register = [
 	// Validate fields.
-	body("firstName").isLength({ min: 1 }).trim().withMessage("First name must be specified.")
-		.isAlphanumeric().withMessage("First name has non-alphanumeric characters."),
-	body("lastName").isLength({ min: 1 }).trim().withMessage("Last name must be specified.")
-		.isAlphanumeric().withMessage("Last name has non-alphanumeric characters."),
-	body("email").isLength({ min: 1 }).trim().withMessage("Email must be specified.")
-		.isEmail().withMessage("Email must be a valid email address.").custom((value) => {
-			return UserModel.findOne({email : value}).then((user) => {
-				if (user) {
-					return Promise.reject("E-mail already in use");
-				}
-			});
-		}),
-	body("password").isLength({ min: 6 }).trim().withMessage("Password must be 6 characters or greater."),
-	// Sanitize fields.
-	sanitizeBody("firstName").escape(),
-	sanitizeBody("lastName").escape(),
-	sanitizeBody("email").escape(),
-	sanitizeBody("password").escape(),
+	// body("firstName").isLength({ min: 1 }).trim().withMessage("First name must be specified.")
+	// 	.isAlphanumeric().withMessage("First name has non-alphanumeric characters."),
+	// body("lastName").isLength({ min: 1 }).trim().withMessage("Last name must be specified.")
+	// 	.isAlphanumeric().withMessage("Last name has non-alphanumeric characters."),
+	// body("email").isLength({ min: 1 }).trim().withMessage("Email must be specified.")
+	// 	.isEmail().withMessage("Email must be a valid email address.").custom((value) => {
+	// 		return UserModel.findOne({email : value}).then((user) => {
+	// 			if (user) {
+	// 				return Promise.reject("E-mail already in use");
+	// 			}
+	// 		});
+	// 	}),
+	// body("password").isLength({ min: 6 }).trim().withMessage("Password must be 6 characters or greater."),
+	// // Sanitize fields.
+	// sanitizeBody("firstName").escape(),
+	// sanitizeBody("lastName").escape(),
+	// sanitizeBody("email").escape(),
+	// sanitizeBody("password").escape(),
 	// Process request after validation and sanitization.
 	(req, res) => {
+		console.log("req::",req.body);
 		try {
 			// Extract the validation errors from a request.
-			const errors = validationResult(req);
-			if (!errors.isEmpty()) {
-				// Display sanitized values/errors messages.
-				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
-			}else {
+			// const errors = validationResult(req);
+			// if (!errors.isEmpty()) {
+			// 	// Display sanitized values/errors messages.
+			// 	return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+			// }else {
 				//hash input password
 				bcrypt.hash(req.body.password,10,function(err, hash) {
+					console.log("hashed",hash,err);
 					// generate OTP for confirmation
 					let otp = utility.randomNumber(4);
+					console.log("otp:",otp)
 					// Create User object with escaped and trimmed data
 					var user = new UserModel(
 						{
@@ -62,37 +69,106 @@ exports.register = [
 							confirmOTP: otp
 						}
 					);
-					// Html email body
-					let html = "<p>Please Confirm your Account.</p><p>OTP: "+otp+"</p>";
-					// Send confirmation email
-					mailer.send(
-						constants.confirmEmails.from, 
-						req.body.email,
-						"Confirm Account",
-						html
-					).then(function(){
-						// Save user.
-						user.save(function (err) {
-							if (err) { return apiResponse.ErrorResponse(res, err); }
-							let userData = {
-								_id: user._id,
-								firstName: user.firstName,
-								lastName: user.lastName,
-								email: user.email
-							};
-							return apiResponse.successResponseWithData(res,"Registration Success.", userData);
-						});
-					}).catch(err => {
-						console.log(err);
-						return apiResponse.ErrorResponse(res,err);
-					}) ;
+					console.log("user:",user);
+					user.save(function (err) {
+						console.log("error", err);
+						if (err) {  return apiResponse.ErrorResponse(res, err); }
+						;
+						return apiResponse.successResponseWithData(res,"Registered.");
+					});
 				});
-			}
+				
+		//	}
 		} catch (err) {
+			console.log("err",err);
 			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}];
+
+	exports.dataDumping= [
+		(req, res) => {
+
+			var attributes = {}
+			var folder = req.body.folder;
+			var startlimit = req.body.startlimit;
+			var endlimit = req.body.endlimit;
+			console.log("start",startlimit,endlimit,folder);
+			try {//../dist/1\ COMMON/json/
+
+				for(var i=startlimit;i<=endlimit;i++) {
+					console.log("loop");
+				fs.readFile("./dist/"+folder+"/"+i+".json", "utf8", (err, jsonString) => {
+				if (err) {
+					console.log("Error reading file from disk:", err);
+					return;
+				}
+				try {
+					const information = JSON.parse(jsonString);
+					console.log("Customer address is:", information); // => "information address is: Infinity Loop Drive"
+					console.log("name:",information.name);
+					var Category = "";
+					if(information.description.includes('Phoenix')){
+						Category = 'Phoenix'
+					} else if(information.description.includes('Pegasus')){
+						Category = 'Pegasus'
+					} else if(information.description.includes('Taurus')){
+						Category = 'Taurus'
+					} else if(information.description.includes('Whale')){
+						Category = 'Whale'
+					}
+
+					var loop = 0;
+					for (var i in information.attributes) {
+						console.log(information.attributes[i].trait_type.replace(/\s/g, ""));
+						console.log(information.attributes[i].value.replace(/\s/g, ""));
+						attributes[information.attributes[i].trait_type.replace(/\s/g, "")] = (information.attributes[i].value.replace(/\s/g, ""));
+
+					}
+					
+					// Create User object with escaped and trimmed data
+					var shoe = new ShoefyModel(
+						{
+							Shoetype: attributes.ShoeType,
+							Category:Category,
+							Image: "/pinata"+information.image,
+							BACKGROUND: attributes.BACKGROUND,
+							BACKGROUNDASSET: attributes.BACKGROUNDASSET,
+							BASESHOE: attributes.BASESHOE,
+							PATTERN: attributes.PATTERN,
+							TRIBE: attributes.TRIBE,
+							FRONT: attributes.FRONT,
+							SIDE: attributes.SIDE,
+							BACK: attributes.BACK,
+							ACCESORIES: attributes.ACCESORIES,
+							WEAPON: attributes.WEAPON,
+							ASSETSHOE: attributes.ASSETSHOE,
+							ASSETLASER: attributes.ASSETLASER,
+							SHOESIDECOLOURGRADIENT: attributes.SHOESIDECOLOURGRADIENT,
+						}
+					);
+
+					shoe.save(function (err) {
+						
+						if (err) { console.log("error", err); return apiResponse.ErrorResponse(res, err); 
+						};
+						
+					});
+
+				} catch (err) {
+					console.log("Error parsing JSON string:", err);
+				  }
+				});
+			  }
+
+			return apiResponse.successResponseWithData(res,"Dumped.");
+			} catch (err) {
+				return apiResponse.ErrorResponse(res, err);
+			}
+
+		}];
+
+		
 
 /**
  * User login.
@@ -235,21 +311,7 @@ exports.resendConfirmOtp = [
 							let otp = utility.randomNumber(4);
 							// Html email body
 							let html = "<p>Please Confirm your Account.</p><p>OTP: "+otp+"</p>";
-							// Send confirmation email
-							mailer.send(
-								constants.confirmEmails.from, 
-								req.body.email,
-								"Confirm Account",
-								html
-							).then(function(){
-								user.isConfirmed = 0;
-								user.confirmOTP = otp;
-								// Save user.
-								user.save(function (err) {
-									if (err) { return apiResponse.ErrorResponse(res, err); }
-									return apiResponse.successResponse(res,"Confirm otp sent.");
-								});
-							});
+
 						}else{
 							return apiResponse.unauthorizedResponse(res, "Account already confirmed.");
 						}
