@@ -12,7 +12,8 @@ const { constants } = require("../helpers/constants");
 const fs = require("fs");
 const cron = require("node-cron");
 
-Listener.BSClistener()
+Listener.eventListener()
+Listener.eventListenerRapid()
 /**
  * User registration.
  *
