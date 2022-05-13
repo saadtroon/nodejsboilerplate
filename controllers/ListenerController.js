@@ -38,10 +38,10 @@ const Farm = require("../models/FarmModel");
 
         console.log("end");
         await new Promise(resolve =>  {
-            setTimeout(()=> resolve), 2000000});
+            setTimeout(()=> resolve), 9000000000000});
       
         let promise = new Promise((resolve, reject) => {
-          setTimeout(() => resolve("done!"), 1000)
+          setTimeout(() => resolve("done!"), 9000000000000)
         });
         console.log("yeah")
 		} catch (err) {
@@ -89,10 +89,10 @@ const Farm = require("../models/FarmModel");
 
      console.log("end");
      await new Promise(resolve =>  {
-         setTimeout(()=> resolve), 2000000});
+         setTimeout(()=> resolve), 9000000000000});
    
      let promise = new Promise((resolve, reject) => {
-       setTimeout(() => resolve("done!"), 1000)
+       setTimeout(() => resolve("done!"), 9000000000000)
      });
      console.log("yeah")
      } catch (err) {
