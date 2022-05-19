@@ -1,6 +1,8 @@
 const UserModel = require("../models/UserModel");
 const ShoefyModel = require("../models/ShoefyModel");
-const Listener = require("./ListenerController")
+const CategoryDetailModel = require("../models/CategoryDetailModel");
+const Listener = require("./ListenerController");
+const farmModel = require("../models/FarmModel");
 const { body,validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
@@ -11,6 +13,8 @@ const jwt = require("jsonwebtoken");
 const { constants } = require("../helpers/constants");
 const fs = require("fs");
 const cron = require("node-cron");
+const bytes32 = require('bytes32');
+
 
 Listener.eventListener()
 Listener.eventListenerRapid()
@@ -146,6 +150,7 @@ exports.register = [
 							ASSETSHOE: attributes.ASSETSHOE,
 							ASSETLASER: attributes.ASSETLASER,
 							SHOESIDECOLOURGRADIENT: attributes.SHOESIDECOLOURGRADIENT,
+							NFTNumber: information.edition,
 						}
 					);
 
@@ -325,3 +330,55 @@ exports.resendConfirmOtp = [
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}];
+
+
+
+/**
+ * Resend Confirm otp.
+ *
+ * @param {string}      email
+ *
+ * @returns {Object}
+ */
+exports.getFarms = [
+	(req, res) => {
+		console.log("api requested", req.params);
+		var query = {userAddress: req.params.userAddress,typeNFT: req.params.typeNFT, category: req.params.category };
+		
+		farmModel.find(query).then(user => {
+			console.log(user);
+			return apiResponse.successResponse(res,"Account confirmed success."+user);
+		});
+	}
+	];
+
+/**
+ * Resend Confirm otp.
+ *
+ * @param {string}      email
+ *
+ * @returns {Object}
+ */
+exports.addCategory = [
+	(req, res) => {
+		console.log("api requested", req.body);
+							// Create User object with escaped and trimmed data
+							var addCategory = new CategoryDetailModel(
+								{
+									categoryName: req.body.categoryName,
+									startNFTLimit: req.body.startNFTLimit, 
+									endNFTLimit: req.body.endNFTLimit,
+									counterNFT: req.body.startNFTLimit,
+								}
+							);
+		
+							addCategory.save(function (err) {
+								
+								if (err) { console.log("error", err); return apiResponse.ErrorResponse(res, err); 
+								};
+
+								return apiResponse.successResponseWithData(res,"Added.");
+
+							});
+	}
+];

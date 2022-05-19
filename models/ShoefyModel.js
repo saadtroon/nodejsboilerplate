@@ -19,6 +19,7 @@ var ShoefySchema = new Schema({
 	ASSETSHOE: {type: String, required: false},
 	ASSETLASER: {type: String, required: false},
 	SHOESIDECOLOURGRADIENT: {type: String, required: false},
+	NFTNumber: {type: Number, required: false},
 }, {timestamps: true});
 
 module.exports = mongoose.model("Shoefy", ShoefySchema);
