@@ -91,6 +91,12 @@ const CategoryCounterModel = require("../models/CategoryCounterModel");
                                 )
                             });
                 });
+            })
+            .on('changed', (event) => {
+                console.log('--SomeEvent--Changed',event);
+              })
+            .on('error', (e) => {
+            console.log('--SomeEvent--Error',e);
             });
 
         console.log("end");
