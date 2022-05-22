@@ -10,10 +10,18 @@ const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { constants } = require("../helpers/constants");
 const fs = require("fs");
-const cron = require("node-cron");
-const bytes32 = require('bytes32');
+const ImagesModel = require("../models/ImagesModel");
+
+const commonService = require("../services/common");
+const uniqueService = require("../services/unique");
+const rareService = require("../services/rare");
+const legendaryService = require("../services/legendary");
+const epicService = require("../services/epic");
+const mythicgodService = require("../services/mythicgod");
+const mythicdevilService = require("../services/mythicdevil");
+const mythicalienService = require("../services/mythicalien");
+
 
 
 Listener.eventListener()
@@ -93,14 +101,12 @@ exports.register = [
 
 	exports.dataDumping= [
 		(req, res) => {
-
 			var attributes = {}
 			var folder = req.body.folder;
 			var startlimit = req.body.startlimit;
 			var endlimit = req.body.endlimit;
 			console.log("start",startlimit,endlimit,folder);
 			try {//../dist/1\ COMMON/json/
-
 				for(var i=startlimit;i<=endlimit;i++) {
 					console.log("loop");
 				fs.readFile("./dist/"+folder+"/"+i+".json", "utf8", (err, jsonString) => {
@@ -134,23 +140,23 @@ exports.register = [
 					// Create User object with escaped and trimmed data
 					var shoe = new ShoefyModel(
 						{
-							Shoetype: attributes.ShoeType,
-							Category:Category,
-							Image: "/pinata"+information.image,
-							BACKGROUND: attributes.BACKGROUND,
-							BACKGROUNDASSET: attributes.BACKGROUNDASSET,
-							BASESHOE: attributes.BASESHOE,
-							PATTERN: attributes.PATTERN,
-							TRIBE: attributes.TRIBE,
-							FRONT: attributes.FRONT,
-							SIDE: attributes.SIDE,
-							BACK: attributes.BACK,
-							ACCESORIES: attributes.ACCESORIES,
-							WEAPON: attributes.WEAPON,
-							ASSETSHOE: attributes.ASSETSHOE,
-							ASSETLASER: attributes.ASSETLASER,
-							SHOESIDECOLOURGRADIENT: attributes.SHOESIDECOLOURGRADIENT,
-							NFTNumber: information.edition,
+							shoetype: attributes.ShoeType,
+							categoryName:Category,
+							image: "/pinata"+information.image,
+							background: attributes.BACKGROUND,
+							backgroundAsset: attributes.BACKGROUNDASSET,
+							baseShoe: attributes.BASESHOE,
+							pattern: attributes.PATTERN,
+							tribe: attributes.TRIBE,
+							front: attributes.FRONT,
+							side: attributes.SIDE,
+							back: attributes.BACK,
+							accesories: attributes.ACCESORIES,
+							weapon: attributes.WEAPON,
+							assetShoe: attributes.ASSETSHOE,
+							assetLayer: attributes.ASSETLASER,
+							shoeSideColourGradient: attributes.SHOESIDECOLOURGRADIENT,
+							sNFTNumber: information.edition,
 						}
 					);
 
@@ -342,13 +348,56 @@ exports.resendConfirmOtp = [
  */
 exports.getFarms = [
 	(req, res) => {
+		try{
 		console.log("api requested", req.params);
-		var query = {userAddress: req.params.userAddress,typeNFT: req.params.typeNFT, category: req.params.category };
+		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category };
+		// created at and now difference 15 days image changed
+		let ts = Date.now();
+			// console.log(query);
 		
-		farmModel.find(query).then(user => {
-			console.log(user);
-			return apiResponse.successResponse(res,"Account confirmed success."+user);
+		farmModel.find(query).then(farms => {
+			
+			farms.forEach(function (farm){
+				switch(farm.categoryName){
+					case "COMMON":
+						commonService(farm);
+						break;
+					case "UNIQUE":
+						uniqueService
+						break;
+					case "RARE":
+						rareService
+						break;
+					case "EPIC":
+						epicService
+						break;
+					case "LEGENDARY":
+						legendaryService
+						break;
+					case "MYTHICGOD":
+						mythicgodService
+						break;
+					case "MYTHICDEVIL":
+						mythicdevilService
+						break;
+					case "MYTHICALIEN":
+						mythicalienService
+						break;
+
+				}
+			});
+
 		});
+		console.log("farm");
+
+		ShoefyModel.find(query).then(shoefy => {
+			console.log("shoefy::",shoefy)
+		});
+		return apiResponse.successResponse(res,"Account confirmed success.");
+
+	} catch(e){
+		console.log(e);
+	}
 	}
 	];
 

@@ -3,23 +3,23 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var ShoefySchema = new Schema({
-	Shoetype: {type: String, required: true},
-	Category: {type: String, required: true},
-	Image: {type: String, required: true},
-	BACKGROUND: {type: String, required: false},
-	BACKGROUNDASSET: {type: String, required: false},
-	BASESHOE: {type: String, required: false},
-	PATTERN: {type: String, required: false},
-	TRIBE: {type: String, required: false},
-	FRONT: {type: String, required: false},
-	SIDE: {type: String, required: false},
-	BACK: {type: String, required: false},
-	ACCESORIES: {type: String, required: false},
-	WEAPON: {type: String, required: false},
-	ASSETSHOE: {type: String, required: false},
-	ASSETLASER: {type: String, required: false},
-	SHOESIDECOLOURGRADIENT: {type: String, required: false},
-	NFTNumber: {type: Number, required: false},
+	shoetype: {type: String, required: true},
+	categoryName: {type: String, required: true},
+	image: {type: String, required: true},
+	background: {type: String, required: false},
+	backgroundAsset: {type: String, required: false},
+	baseShoe: {type: String, required: false},
+	pattern: {type: String, required: false},
+	tribe: {type: String, required: false},
+	front: {type: String, required: false},
+	side: {type: String, required: false},
+	back: {type: String, required: false},
+	accesories: {type: String, required: false},
+	weapon: {type: String, required: false},
+	assetShoe: {type: String, required: false},
+	assetLayer: {type: String, required: false},
+	shoeSideColourGradient: {type: String, required: false},
+	sNFTNumber: {type: Number, required: false}, // shoefyNFTIdcl
 }, {timestamps: true});
 
 module.exports = mongoose.model("Shoefy", ShoefySchema);

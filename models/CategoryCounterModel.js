@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var CategoryCounterSchema = new Schema({
 	categoryName: {type: String, required: true},
-	ShoeType: {type: String, required: true},
+	shoeType: {type: String, required: true},
 	counterNFT: {type: Number, required: true},
 }, {timestamps: true});
 

@@ -8,6 +8,7 @@ const auth = require("../middlewares/jwt");
 const fs = require("fs");
 var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
+const path = require('path');
 
 
 /**
@@ -53,15 +54,16 @@ exports.saveImages = [
 									console.log("1st part:",stringArray[0]);
 									console.log("2nd part:",stringArray[1]);
 									console.log("3rd part:",stringArray[2]);
-									//let burger = new Buffer(base64str, 'base64');
-
+									
+									var imageN = path.parse(directory3).name;     //=> "hello"
+									
 									  var images = new Images (
-									  	{   Shoetype: directory,
-									  		Category: directory1,
-									  		LayerNum: stringArray[0],
+									  	{   shoeType: directory,
+											categoryName: directory1,
+									  		layerNum: stringArray[0],
 									  		traitType: stringArray[2],
-									  		ImageName: directory3,
-									  		Image: base64str,
+									  		imageName: imageN,
+									  		image: base64str,
 									  	} );
 										
 									  images.save(function (err) {

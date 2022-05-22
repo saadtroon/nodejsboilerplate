@@ -36,31 +36,31 @@ const CategoryCounterModel = require("../models/CategoryCounterModel");
                 var type;
                 console.log(data.returnValues);
                 if (data.returnValues[1] == "0x3955032f1b4fd3485213d1c8a0e4ced5c0b5d4e9ffa466e04ca90c624d38a252") { // common
-                    type = "common";
-
+                    type = "COMMON";
+    
                 } else if (data.returnValues[1] == "0x7876765697b67ef92ea049557e63bf2e2e65bbccace3318b91b901e293c1946d") {  //unique
-                    type = "unique";
+                    type = "UNIQUE";
                 
                 } else if (data.returnValues[1] == "0x2cf735e2c7740b1996c475c19261a0b7dc86863c4718b4dfa4b90956a5ece4ff") {  // rare
-                    type = "rare";
-
+                    type = "RARE";
+    
                 } else if (data.returnValues[1] == "0x04f4f20a2d65eb0f15d7fb252c9027859568c706ff77f8b4471a76adbed564c4") {  // epic
-                    type = "epic";
-
+                    type = "EPIC";
+    
                 } else if (data.returnValues[1] == "0x5b62d0d589d39df21aaf5ecafa555f3f0c1bfcfe9655dbed3f07da10f5e39875") {  // legendary
-                    type = "legendary";
-
+                    type = "LEGENDARY";
+    
                 } else if (data.returnValues[1] == "0x74b2a5b5a47595ac0db41e478e6f267a3829a40387335a65d99a78b6d1d5e97c") {  // mythicgod
-                    type = "mythicgod";
-
+                    type = "MYTHICGOD";
+    
                 } else if (data.returnValues[1] == "0x93662fd07f8df79fc9a100d70fbb89b7d62245d98a7cf2be0c906254befa06b9") {  // mythicdevil
-                    type = "mythicdevil";
-
+                    type = "MYTHICDEVIL";
+    
                 } else if (data.returnValues[1] == "0x8882fa942689ea9d28fd2829d5da0a61aa9ab75866019976cdfc70ee2e0a6920") {  // mythicalien
-                    type = "mythicalien";
-
+                    type = "MYTHICALIEN";
+    
                 }
-                var query = {categoryName: type};
+                var query = {categoryName: type.toLowerCase()};
                 var counter;
                 CategoryDetailModel.find(query).then(category => {
 
@@ -70,7 +70,7 @@ const CategoryCounterModel = require("../models/CategoryCounterModel");
                                 categoryBytes: data.returnValues[1],
                                 farmId: data.returnValues[2],
                                 typeNFT: "general",
-                                MintStatus: "Pending",
+                                mintStatus: "Pending",
                                 assignedNFT: category[0].counterNFT,
                             } );
                             counter = category[0].counterNFT
@@ -138,32 +138,35 @@ const CategoryCounterModel = require("../models/CategoryCounterModel");
             var type;
             console.log(data.returnValues);
             if (data.returnValues[1] == "0x3955032f1b4fd3485213d1c8a0e4ced5c0b5d4e9ffa466e04ca90c624d38a252") { // common
-                type = "common";
+                type = "COMMON";
 
             } else if (data.returnValues[1] == "0x7876765697b67ef92ea049557e63bf2e2e65bbccace3318b91b901e293c1946d") {  //unique
-                type = "unique";
+                type = "UNIQUE";
             
             } else if (data.returnValues[1] == "0x2cf735e2c7740b1996c475c19261a0b7dc86863c4718b4dfa4b90956a5ece4ff") {  // rare
-                type = "rare";
+                type = "RARE";
 
             } else if (data.returnValues[1] == "0x04f4f20a2d65eb0f15d7fb252c9027859568c706ff77f8b4471a76adbed564c4") {  // epic
-                type = "epic";
+                type = "EPIC";
 
             } else if (data.returnValues[1] == "0x5b62d0d589d39df21aaf5ecafa555f3f0c1bfcfe9655dbed3f07da10f5e39875") {  // legendary
-                type = "legendary";
+                type = "LEGENDARY";
 
             } else if (data.returnValues[1] == "0x74b2a5b5a47595ac0db41e478e6f267a3829a40387335a65d99a78b6d1d5e97c") {  // mythicgod
-                type = "mythicgod";
+                type = "MYTHICGOD";
 
             } else if (data.returnValues[1] == "0x93662fd07f8df79fc9a100d70fbb89b7d62245d98a7cf2be0c906254befa06b9") {  // mythicdevil
-                type = "mythicdevil";
+                type = "MYTHICDEVIL";
 
             } else if (data.returnValues[1] == "0x8882fa942689ea9d28fd2829d5da0a61aa9ab75866019976cdfc70ee2e0a6920") {  // mythicalien
-                type = "mythicalien";
+                type = "MYTHICALIEN";
 
             }
             var query = {categoryName: type};
-            var counter;
+            var nextUpdatedTimestamp = new Date();
+            nextUpdatedTimestamp.setDate(today.getDate()+15);
+
+            console.log(nextUpdatedTimestamp)
             
         CategoryDetailModel.find(query).then(category => {
             var farm = new Farm (
@@ -173,8 +176,9 @@ const CategoryCounterModel = require("../models/CategoryCounterModel");
                 categoryBytes: data.returnValues[1],
                 farmId: data.returnValues[2],
                 typeNFT: "rapid",
-                MintStatus: "Pending",
+                mintStatus: "Pending",
                 assignedNFT: category[0].counterNFT,
+                nextUpdatedTimestamp: nextUpdatedTimestamp,
             });
 
         counter = category[0].counterNFT

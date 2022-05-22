@@ -8,7 +8,7 @@ router.post("/login", AuthController.login);
 router.post("/verify-otp", AuthController.verifyConfirm);
 router.post("/resend-verify-otp", AuthController.resendConfirmOtp);
 router.post("/dataDumping", AuthController.dataDumping);
-router.get("/getFarms/userAddress/:userAddress/NFTType/:NFTType/Category/:Category", AuthController.getFarms);
+router.get("/getFarms/userAddress/:userAddress/typeNFT/:NFTType/category/:category", AuthController.getFarms);
 router.post("/addCategory", AuthController.addCategory);
 router.post("/saveImages", ImagesController.saveImages);
 router.get("/displayImages",ImagesController.displayImages);
