@@ -19,7 +19,7 @@ const path = require('path');
 exports.saveImages = [
 	function (req, res) {
 		try {
-			console.log("saad");
+			
 			dirname = "./UPDATESHOEFY";
 				fs.readdir(dirname, function(err, filenameDIR) {
 				   if (err) {
@@ -39,39 +39,38 @@ exports.saveImages = [
 							if (err) {
 								console.log("error",err)
 							}
-							filenameDIR2.forEach(function(directory2) {
+								filenameDIR2.forEach(function(directory2) {
 						//		console.log("subdirectory: ",directory2)
 								fs.readdir(dirname+"/"+directory+"/"+directory1+"/"+directory2, function(err, filenameDIR3) {
-									console.log("directory:",dirname+"/"+directory+"/"+directory1+"/"+directory2)
-									console.log("filenames:", filenameDIR3)
-								 if (err) {
-								   console.log("error",err);
-								 }
+									if (err) {
+									console.log("error",err);
+									}
 								    filenameDIR3.forEach(function(directory3) {
 									var base64str =  fs.readFileSync(dirname+"/"+directory+"/"+directory1+"/"+directory2+"/"+directory3, 'base64');
 
-									var stringArray = directory2.split(/(\s+)/);
-									console.log("1st part:",stringArray[0]);
-									console.log("2nd part:",stringArray[1]);
-									console.log("3rd part:",stringArray[2]);
+									var stringArray = directory2.split(/(?<=^\S+)\s/);
+								//	console.log("1st part:",stringArray[0]);
+								//	console.log("2nd part:",stringArray[1]);
 									
 									var imageN = path.parse(directory3).name;     //=> "hello"
 									
 									  var images = new Images (
-									  	{   shoeType: directory,
-											categoryName: directory1,
+									  	{   shoeType: directory.replace(/\s+/, ""),
+											categoryName: directory1.replace(/\s+/, ""),
 									  		layerNum: stringArray[0],
-									  		traitType: stringArray[2],
-									  		imageName: imageN,
+									  		traitType: stringArray[1].replace(/\s/g, ""),
+									  		imageName: imageN.replace(/\s+/, ""),
 									  		image: base64str,
 									  	} );
-										
+								
+
 									  images.save(function (err) {
 						
 											if (err) { console.log("error", err); return apiResponse.ErrorResponse(res, err); 
 											};
 											
 										});
+									
 
 								});
 							});
