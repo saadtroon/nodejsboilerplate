@@ -107,9 +107,6 @@ Listener.eventListenerRapid()
 
 		}];
 
-		
-
-
 
 /**
  * getFarms.
@@ -134,7 +131,7 @@ exports.getFarms = [
 
 					switch(farm.categoryName){
 						case "COMMON":
-							commonService(farm);
+							farm  = commonService(farm);
 							break;
 						case "UNIQUE":
 							uniqueService
