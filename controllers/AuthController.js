@@ -107,9 +107,6 @@ Listener.eventListenerRapid()
 
 		}];
 
-		
-
-
 
 /**
  * getFarms.
@@ -121,51 +118,56 @@ Listener.eventListenerRapid()
 exports.getFarms = [
 	(req, res) => {
 		try{
-		console.log("api requested", req.params);
+		
 		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category };
-		// created at and now difference 15 days image changed
-		let ts = Date.now();
-			// console.log(query);
+		
+		let response = [];
 		
 		farmModel.find(query).then(farms => {
 			
 			farms.forEach(function (farm){
-				switch(farm.categoryName){
-					case "COMMON":
-						commonService(farm);
-						break;
-					case "UNIQUE":
-						uniqueService
-						break;
-					case "RARE":
-						rareService
-						break;
-					case "EPIC":
-						epicService
-						break;
-					case "LEGENDARY":
-						legendaryService
-						break;
-					case "MYTHICGOD":
-						mythicgodService
-						break;
-					case "MYTHICDEVIL":
-						mythicdevilService
-						break;
-					case "MYTHICALIEN":
-						mythicalienService
-						break;
 
+				if (Date.now() > farm.nextUpdatedTimestamp ){
+
+					switch(farm.categoryName){
+						case "COMMON":
+							farm  = commonService(farm);
+							break;
+						case "UNIQUE":
+							uniqueService
+							break;
+						case "RARE":
+							rareService
+							break;
+						case "EPIC":
+							epicService
+							break;
+						case "LEGENDARY":
+							legendaryService
+							break;
+						case "MYTHICGOD":
+							mythicgodService
+							break;
+						case "MYTHICDEVIL":
+							mythicdevilService
+							break;
+						case "MYTHICALIEN":
+							mythicalienService
+							break;
+
+					}
+				}else{
+					response.push(farm);
 				}
 			});
 
 		});
 		console.log("farm");
 
-		ShoefyModel.find(query).then(shoefy => {
-			console.log("shoefy::",shoefy)
-		});
-		return apiResponse.successResponse(res,"Account confirmed success.");
+		// ShoefyModel.find(query).then(shoefy => {
+		// 	console.log("shoefy::",shoefy)
+		// });
+		return apiResponse.successResponse(res, response);
 
 	} catch(e){
 		console.log(e);

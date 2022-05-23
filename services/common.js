@@ -4,11 +4,9 @@ const ImagesModel = require("../models/ImagesModel");
 
 
 function stichService(farm){
-    console.log(farm.currentLayer);
-    console.log(Date.now(),farm.nextUpdatedTimestamp)
-    if (Date.now() > farm.nextUpdatedTimestamp){
         stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT);
-        updatenextUpdatedTimestamp();
+
+        return farm;
     
     }
 
@@ -18,8 +16,7 @@ module.exports = stichService;
 
 function stichLayers(layerNum, shoeTypes, assignedNFT) {
     if (layerNum == 0) {
-        console.log("saad");
-
+      
         var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
 		
         ShoefyModel.find(query).then(shoefy => {
@@ -28,41 +25,71 @@ function stichLayers(layerNum, shoeTypes, assignedNFT) {
             query = { layerNum: 1, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"BACKGROUND",imageName:shoefy[0].background}
             console.log("query",query)
             
-            
             ImagesModel.find(query).then(images => {
                 console.log("images::::",images)
              });
 
-
+            // set farm img to this image
         });
 
+        // return 1, img, 15
+    }
 
+    if (layerNum == 1){
+        var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
+		
+        ShoefyModel.find(query).then(shoefy => {
+            ImagesModel.find(query)
+
+            query1 = { layerNum: 2, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"BASESHOE",imageName:shoefy[0].baseShoe}
+            query2 = { layerNum: 3, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"FRONT",imageName:shoefy[0].front}
+            
+            ImagesModel.find(query1).then(images => {
+                console.log("images::::",images)
+             });
+            ImagesModel.find(query2).then(images => {
+                console.log("images::::",images)
+             });
+
+            // stich farm img with img 1 and img 2 
+        });
+    }
+    if (layerNum == 3){
+        var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
+        
+        ShoefyModel.find(query).then(shoefy => {
+            ImagesModel.find(query)
+
+            query1 = { layerNum: 4, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"SIDE",imageName:shoefy[0].side}
+            query2 = { layerNum: 5, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"BACK",imageName:shoefy[0].back}
+            
+            ImagesModel.find(query1).then(images => {
+                console.log("images::::",images)
+                });
+            ImagesModel.find(query2).then(images => {
+                console.log("images::::",images)
+                });
+
+            // stich farm img with img 1 and img 2 
+        });
+    }
+    if (layerNum == 5){
+        var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
+        
+        ShoefyModel.find(query).then(shoefy => {
+            ImagesModel.find(query)
+
+            query = { layerNum: 6, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"SIDE",imageName:shoefy[0].shoeSideColourGradient}
+            
+            ImagesModel.find(query).then(images => {
+                console.log("images::::",images)
+            });    
+            // stich farm img with img
+        });                  
     }
 }
 
-// function stichlayers(){
-//     // check current layer number of farm. 
-//     // stich next layer on the existing stored image. 
 
-//     if (layerNum =  0){
-//         image = background // query {shoe type, categoryName, background: } on shoefies and images table 
-//         layer +=1;
-//     }
-
-//     if(layerNum = 1){
-//         nextLayer1 = baseshoes // query {shoe type, categoryName, baseshoes: }
-//         nextlayer2 = front 
-//         image = image+ nextLayer;
-//         image = image + front;
-//         layer +=3;
-//     }
-//     if (layerNum = 3){
-//         nextLayer = baseshoes // query {shoe type, categoryName, baseshoes: }
-//         image = image+ nextLayer;
-//     }
-
-
-// }
 
 function updatenextUpdatedTimestamp(){
 
