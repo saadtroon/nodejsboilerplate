@@ -1,6 +1,9 @@
+var Jimp = require('jimp');
+const { promisify } = require('util');
 
 const ShoefyModel = require("../models/ShoefyModel");
 const ImagesModel = require("../models/ImagesModel");
+
 
 
 function stichService(farm){
@@ -91,6 +94,17 @@ function stichLayers(layerNum, shoeTypes, assignedNFT) {
 
 
 
-function updatenextUpdatedTimestamp(){
+async function stichImages(img1, img2){
+    const MIME_TYPE = 'image/png';
+    
+    const image = await Jimp.read(Buffer.from(img1, 'base64'));
+    const image2 = await Jimp.read(Buffer.from(img2, 'base64'));
 
+    image.resize(600,600);
+    image.blit(image2,0,0);
+
+    const toBase64 = promisify(image.getBase64).bind(image);
+    // image.write('new_imgae.png');
+
+    return await toBase64(MIME_TYPE);
 }
