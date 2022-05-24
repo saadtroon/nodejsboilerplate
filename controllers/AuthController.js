@@ -125,13 +125,14 @@ exports.getFarms = [
 		
 		farmModel.find(query).then(farms => {
 			
-			farms.forEach(function (farm){
+			farms.forEach(async function (farm){
 
 				if (Date.now() > farm.nextUpdatedTimestamp ){
 
 					switch(farm.categoryName){
 						case "COMMON":
-							farm  = commonService(farm);
+							farm  = await commonService(farm);
+							console.log(farm);
 							break;
 						case "UNIQUE":
 							uniqueService

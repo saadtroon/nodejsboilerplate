@@ -9,7 +9,10 @@ var glayerNumbers,gImage,gtime;
 
 async function stichService(farm){
         await stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT);
-        console.log("asdsadsad",glayerNumbers,gImage,gtime);
+        // console.log("asdsadsad",glayerNumbers,gImage,gtime);
+        farm.image = gImage;
+        farm.currentLayer = glayerNumbers;
+        farm.nextUpdatedTimestamp = gtime;
         return farm;
     
     }
