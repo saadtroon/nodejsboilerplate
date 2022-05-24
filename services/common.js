@@ -3,41 +3,53 @@ const { promisify } = require('util');
 
 const ShoefyModel = require("../models/ShoefyModel");
 const ImagesModel = require("../models/ImagesModel");
+var glayerNumbers,gfinalImage,gtime;
 
 
-
-function stichService(farm){
-        stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT);
-
+async function stichService(farm){
+       var layerNumbers,finalImage,time = await stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT);
+        console.log("asdsadsad",glayerNumbers,gfinalImage,gtime);
         return farm;
     
     }
 
-}
+
+
 
 module.exports = stichService;
 
-function stichLayers(layerNum, shoeTypes, assignedNFT) {
+async function stichLayers(layerNum, shoeTypes, assignedNFT) {
+
     if (layerNum == 0) {
       
         var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
-		
-        ShoefyModel.find(query).then(shoefy => {
+		var layerNumbers,finalImage,time;
+
+        layerNumbers,finalImage,time = await ShoefyModel.find(query).then(async function(shoefy) {
             ImagesModel.find(query)
 
             query = { layerNum: 1, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"BACKGROUND",imageName:shoefy[0].background}
-            console.log("query",query)
+          //  console.log("query",query)
             
-            ImagesModel.find(query).then(images => {
-                console.log("images::::",images)
-             });
-
+                return await ImagesModel.find(query).then(async function(images) {
+              //  console.log("images::::",images);
+                    layerNumbers = 1;
+                    finalImage = images[0].image;
+                    time = 15;
+                    return layerNumbers,finalImage,time
+                }, function(err) {
+                    console.log(err);
+                });
+               // return layerNumber,finalImage,time
             // set farm img to this image
+        }, function(err) {
+            console.log(err);
         });
-
-        // return 1, img, 15
+        glayerNumbers = layerNumbers
+        gfinalImage = finalImage
+        gtime = time
+        return layerNumbers,finalImage,time;
     }
-
     if (layerNum == 1){
         var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
 		
@@ -57,6 +69,7 @@ function stichLayers(layerNum, shoeTypes, assignedNFT) {
             // stich farm img with img 1 and img 2 
         });
     }
+
     if (layerNum == 3){
         var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
         
