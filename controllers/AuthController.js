@@ -132,7 +132,6 @@ exports.getFarms = [
 					switch(farm.categoryName){
 						case "COMMON":
 							farm  = await commonService(farm);
-							console.log(farm);
 							break;
 						case "UNIQUE":
 							uniqueService

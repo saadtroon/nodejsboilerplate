@@ -6,13 +6,17 @@ const ImagesModel = require("../models/ImagesModel");
 
 var glayerNumbers,gImage,gtime;
 
+let oneday = 86400;
+
 
 async function stichService(farm){
         await stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT);
         // console.log("asdsadsad",glayerNumbers,gImage,gtime);
         farm.image = gImage;
         farm.currentLayer = glayerNumbers;
-        farm.nextUpdatedTimestamp = gtime;
+        let timestamp =  parseInt( farm.nextUpdatedTimestamp );
+        timestamp = timestamp + (gtime * oneday);
+        farm.nextUpdatedTimestamp = timestamp.toString();
         return farm;
     
     }
@@ -54,10 +58,10 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT) {
             query2 = { layerNum: 3, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"FRONT",imageName:shoefy[0].front}
             
             ImagesModel.find(query1).then(images => {
-                console.log("images::::",images)
+                // console.log("images::::",images)
              });
             ImagesModel.find(query2).then(images => {
-                console.log("images::::",images)
+                // console.log("images::::",images)
              });
 
             // stich farm img with img 1 and img 2 
