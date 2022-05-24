@@ -123,7 +123,7 @@ exports.getFarms = [
 		
 		let response = [];
 		
-		farmModel.find(query).then(farms => {
+		farmModel.find(query).then(async function(farms) {
 			
 			farms.forEach(async function (farm){
 
@@ -132,6 +132,12 @@ exports.getFarms = [
 					switch(farm.categoryName){
 						case "COMMON":
 							farm  = await commonService(farm);
+							farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
+								if (!err) { console.log("Farm updated successfully"); }
+								else {
+									console.log("Farm updation failed", err);
+								}
+							});
 							break;
 						case "UNIQUE":
 							uniqueService
@@ -156,6 +162,7 @@ exports.getFarms = [
 							break;
 
 					}
+					
 				}else{
 					response.push(farm);
 				}

@@ -9,9 +9,8 @@ var glayerNumbers,gImage,gtime;
 let oneday = 86400;
 
 
-async function stichService(farm){
+async function stichService(farm) {
         await stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT);
-        // console.log("asdsadsad",glayerNumbers,gImage,gtime);
         farm.image = gImage;
         farm.currentLayer = glayerNumbers;
         let timestamp =  parseInt( farm.nextUpdatedTimestamp );
