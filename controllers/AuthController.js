@@ -127,7 +127,7 @@ exports.getFarms = [
 			
 			farms.forEach(async function (farm){
 
-				if (Date.now() > farm.nextUpdatedTimestamp ){
+				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending"){
 
 					switch(farm.categoryName){
 						case "COMMON":
@@ -164,6 +164,7 @@ exports.getFarms = [
 					}
 					
 				}else{
+					console.log(farm);
 					response.push(farm);
 				}
 			});
@@ -174,7 +175,7 @@ exports.getFarms = [
 		// ShoefyModel.find(query).then(shoefy => {
 		// 	console.log("shoefy::",shoefy)
 		// });
-		return apiResponse.successResponse(res, response);
+		return apiResponse.successResponse(res, {result: response});
 
 	} catch(e){
 		console.log(e);
