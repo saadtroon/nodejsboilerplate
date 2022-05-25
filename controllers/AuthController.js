@@ -127,15 +127,15 @@ exports.getFarms = [
 			
 			farms.forEach(async function (farm){
 
-				if (Date.now() > farm.nextUpdatedTimestamp ){
+				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending"){
 
 					switch(farm.categoryName){
 						case "COMMON":
 							farm  = await commonService(farm);
 							farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
-								if (!err) { console.log("error.",err); }
+								if (!err) { console.log("Farm updated successfully"); }
 								else {
-									console.log("else");
+									console.log("Farm updation failed", err);
 								}
 							});
 							break;
@@ -162,7 +162,9 @@ exports.getFarms = [
 							break;
 
 					}
+					
 				}else{
+					console.log(farm);
 					response.push(farm);
 				}
 			});
@@ -173,7 +175,7 @@ exports.getFarms = [
 		// ShoefyModel.find(query).then(shoefy => {
 		// 	console.log("shoefy::",shoefy)
 		// });
-		return apiResponse.successResponse(res, response);
+		return apiResponse.successResponse(res, {result: response});
 
 	} catch(e){
 		console.log(e);
