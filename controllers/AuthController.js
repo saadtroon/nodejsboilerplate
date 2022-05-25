@@ -118,7 +118,7 @@ Listener.eventListenerRapid()
 exports.getFarms = [
 	(req, res) => {
 		try{
-		
+		console.log("calling getFarms:");
 		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category };
 		
 		let response = [];
