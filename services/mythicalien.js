@@ -153,7 +153,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             baseImage = await stichImages(baseImage, firstLayer);
             return baseImage;
         });
-        setGlobalValues(7, finalImage, 15);
+        setGlobalValues(7, finalImage, 30);
     }
 
     if (layerNum == 7) {
@@ -179,7 +179,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             return baseImage;
         });
-        setGlobalValues(8, finalImage, 15);
+        setGlobalValues(8, finalImage, 30);
     }
 
     if (layerNum == 8) {
@@ -205,7 +205,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             return baseImage;
         });
-        setGlobalValues(8, finalImage, 15);
+        setGlobalValues(8, finalImage, 30);
     }
 
     if (layerNum == 9) {
@@ -231,7 +231,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             return baseImage;
         });
-        setGlobalValues(10, finalImage, 15);
+        setGlobalValues(10, finalImage, 30);
     }
 
     if (layerNum == 10) {
@@ -257,7 +257,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             return baseImage;
         });
-        setGlobalValues(11, finalImage, 15);
+        setGlobalValues(11, finalImage, 30);
     }
 
     if (layerNum == 11) {
@@ -283,7 +283,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             return baseImage;
         });
-        setGlobalValues(12, finalImage, 15);
+        setGlobalValues(12, finalImage, 30);
     }
 
     if (layerNum == 12) {
@@ -309,7 +309,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             return baseImage;
         });
-        setGlobalValues(13, finalImage, 15);
+        setGlobalValues(13, finalImage, 30);
     }
 }
 
