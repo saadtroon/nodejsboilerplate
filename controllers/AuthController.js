@@ -131,14 +131,11 @@ exports.getFarms = [
 
 					switch(farm.categoryName){
 						case "COMMON":
-							farm  = await commonService(farm);
-							farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
-								if (!err) { console.log("Farm updated successfully"); }
-								else {
-									console.log("Farm updation failed", err);
-								}
-							});
+							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+								farm  = await commonService(farm);
+							}
 							break;
+							
 						case "UNIQUE":
 							farm  = await uniqueService(farm);
 							farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
@@ -174,6 +171,13 @@ exports.getFarms = [
 							break;
 
 					}
+
+					farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
+						if (!err) { console.log("Farm updated successfully"); }
+						else {
+							console.log("Farm updation failed", err);
+						}
+					});
 					
 				}else{
 					console.log(farm);
