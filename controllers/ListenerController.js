@@ -3,7 +3,6 @@ const Web3 = require('web3');
 const fs = require("fs");
 const Farm = require("../models/FarmModel");
 const CategoryDetailModel = require("../models/CategoryDetailModel");
-const CategoryCounterModel = require("../models/CategoryCounterModel");
 /**
  * Book List.
  * 
@@ -186,13 +185,13 @@ const CategoryCounterModel = require("../models/CategoryCounterModel");
     } else if (returnValue == "0x5b62d0d589d39df21aaf5ecafa555f3f0c1bfcfe9655dbed3f07da10f5e39875") {  // legendary
         type = "LEGENDARY";
 
-    } else if (returnValue == "0x74b2a5b5a47595ac0db41e478e6f267a3829a40387335a65d99a78b6d1d5e97c") {  // mythicgod
-        type = "MYTHICGOD";
+    } else if (returnValue == "0x26d053d43cd0108003f60e6e90adfb10b90203969f78f4c831e6f61a20da5ff5") {  // mythic-god
+        type = "MYTHICGOD"; 
 
-    } else if (returnValue == "0x93662fd07f8df79fc9a100d70fbb89b7d62245d98a7cf2be0c906254befa06b9") {  // mythicdevil
+    } else if (returnValue == "0x44e32297331fe14111706e1cb9bd9190b17b12743186529932199f3fd6d31352") {  // mythic-devil
         type = "MYTHICDEVIL";
 
-    } else if (returnValue == "0x8882fa942689ea9d28fd2829d5da0a61aa9ab75866019976cdfc70ee2e0a6920") {  // mythicalien
+    } else if (returnValue == "0xc997682c8ea1bbd29746fc05468bbcae2ae8133425ce5f23be32e09774956e82") {  // mythic-alien
         type = "MYTHICALIEN";
     }
     return type;
