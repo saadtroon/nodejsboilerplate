@@ -137,22 +137,14 @@ exports.getFarms = [
 							break;
 							
 						case "UNIQUE":
-							farm  = await uniqueService(farm);
-							farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
-								if (!err) { console.log("Farm updated successfully"); }
-								else {
-									console.log("Farm updation failed", err);
-								}
-							});
+							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+								farm  = await uniqueService(farm);
+							}
 							break;
 						case "RARE":
-							farm  = await rareService(farm);
-							farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
-								if (!err) { console.log("Farm updated successfully"); }
-								else {
-									console.log("Farm updation failed", err);
-								}
-							});
+							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+								farm  = await rareService(farm);
+							}
 							break;
 						case "EPIC":
 							epicService
