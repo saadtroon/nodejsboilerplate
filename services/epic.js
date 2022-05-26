@@ -7,17 +7,16 @@ const ImagesModel = require("../models/ImagesModel");
 var glayerNumbers,gImage,gtime;
 
 let oneday = 86400000;
-
+var error = "";
 
 async function stichService(farm) {
-        console.log("epic");
         await stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT, farm.image);
         farm.image = gImage;
         farm.currentLayer = glayerNumbers;
         let timestamp =  parseInt( farm.nextUpdatedTimestamp );
         timestamp = timestamp + (gtime * oneday);
         farm.nextUpdatedTimestamp = timestamp.toString();
-        if (glayerNumbers == 6){farm.mintStatus = "Complete"}
+        if (glayerNumbers == 9) {farm.mintStatus = "Complete"}
         return farm;
     
     }
@@ -33,9 +32,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
 
         finalImage = await ShoefyModel.find(query).then(async function(shoefy) {
             ImagesModel.find(query)
-
-            query = { layerNum: 1, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"BACKGROUND",imageName:shoefy[0].background}
-            
+            query = { layerNum: 1, shoeType: shoeTypes,categoryName: shoefy[0].categoryName.toUpperCase(), imageName:shoefy[0].background}
                 return await ImagesModel.find(query).then(async function(images) {
                     return images[0].image;
                 }, function(err) {
@@ -55,16 +52,22 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
             ImagesModel.find(query)
 
-            query1 = { layerNum: 2, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"BASESHOE",imageName:shoefy[0].baseShoe}
-            query2 = { layerNum: 3, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"FRONT",imageName:shoefy[0].front}
-            
+            query1 = { layerNum: 2, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), imageName:shoefy[0].baseShoe}
+            query2 = { layerNum: 3, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), imageName:shoefy[0].pattern}
+            console.log("query1:query1:",query1);
+
             let firstLayer =  await ImagesModel.find(query1).then(async function(images) {
                 return images[0].image;
             }, function(err) {
                 console.log(err);
             });
+            console.log("query2:",query2);
             let secondLayer = await ImagesModel.find(query2).then(async function(images) {
+                if (images.length <= 0 ){
+                    console.log("error in query", query2);
+                } else {
                 return images[0].image;
+                }
             }, function(err) {
                 console.log(err);
             });
@@ -75,6 +78,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
 
             // stich farm img with img 1 and img 2 
         });
+        console.log("finalImage:",finalImage)
         setGlobalValues(3, finalImage, 15);
     }
 
@@ -84,8 +88,8 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
             ImagesModel.find(query)
 
-            query1 = { layerNum: 4, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"SIDE",imageName:shoefy[0].side}
-            query2 = { layerNum: 5, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"BACK",imageName:shoefy[0].back}
+            query1 = { layerNum: 4, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"SHOESIDECOLOURGRADIENT",imageName:shoefy[0].shoeSideColourGradient}
+            query2 = { layerNum: 5, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"TRIBE",imageName:shoefy[0].tribe}
             
             let firstLayer =  await ImagesModel.find(query1).then(async function(images) {
                 return images[0].image;
@@ -93,7 +97,11 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
                 console.log(err);
             });
             let secondLayer = await ImagesModel.find(query2).then(async function(images) {
+                if (images.length <= 0 ){
+                    console.log("error in query", query2);
+                } else {
                 return images[0].image;
+                }
             }, function(err) {
                 console.log(err);
             });
@@ -111,7 +119,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
             ImagesModel.find(query)
 
-            query = { layerNum: 6, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].shoeSideColourGradient}
+            query = { layerNum: 6, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].front}
             
             let firstLayer =  await ImagesModel.find(query).then(async function(images) {
                 return images[0].image;
@@ -121,10 +129,84 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
 
             baseImage = await stichImages(baseImage, firstLayer);
             return baseImage;
+        });
+        setGlobalValues(6, finalImage, 15);
+    }
 
-            // stich farm img with img
-        });                
-        setGlobalValues(6, finalImage, 0);
+    if (layerNum == 6) {
+        var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
+        
+        finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
+            ImagesModel.find(query)
+
+            query = { layerNum: 7, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].side}
+            
+            let firstLayer =  await ImagesModel.find(query).then(async function(images) {
+                if (images.length <= 0 ){
+                    console.log("error in query", query);
+                } else {
+                    return images[0].image;
+                }
+            }, function(err) {
+                console.log(err);
+            });
+
+            baseImage = await stichImages(baseImage, firstLayer);
+            return baseImage;
+        });
+        setGlobalValues(7, finalImage, 30);
+    }
+
+    if (layerNum == 7) {
+        var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
+        
+        finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
+            ImagesModel.find(query)
+
+            query = { layerNum: 8, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].back}
+            
+            let firstLayer =  await ImagesModel.find(query).then(async function(images) {
+                if (images.length <= 0 ){
+                    console.log("error in query", query);
+                    error = "error in query"+ query;
+                } else {
+                    return images[0].image;
+                }
+            }, function(err) {
+                console.log(err);
+            });
+            if(error == "") {
+                baseImage = await stichImages(baseImage, firstLayer);
+            }
+            return baseImage;
+        });
+        setGlobalValues(8, finalImage, 30);
+    }
+
+    if (layerNum == 8) {
+        var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
+        
+        finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
+            ImagesModel.find(query)
+
+            query = { layerNum: 9, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].accessories}
+            
+            let firstLayer =  await ImagesModel.find(query).then(async function(images) {
+                if (images.length <= 0 ){
+                    console.log("error in query", query);
+                    error = "error in query"+ query;
+                } else {
+                    return images[0].image;
+                }
+            }, function(err) {
+                console.log(err);
+            });
+            if(error == "") {
+                baseImage = await stichImages(baseImage, firstLayer);
+            }
+            return baseImage;
+        });
+        setGlobalValues(9, finalImage, 30);
     }
 }
 
