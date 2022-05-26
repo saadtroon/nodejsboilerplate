@@ -27,7 +27,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
 
     if (layerNum == 0) {
       
-        var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
+        var query = {shoetype: shoeTypes, sNFTNumber: assignedNFT};
 		var finalImage;
 
         finalImage = await ShoefyModel.find(query).then(async function(shoefy) {
@@ -48,7 +48,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         setGlobalValues(1, finalImage, 15);
 
     }
-    if (layerNum == 1){
+    if (layerNum == 1) {
         var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
 		
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
@@ -77,7 +77,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         setGlobalValues(3, finalImage, 15);
     }
 
-    if (layerNum == 3){
+    if (layerNum == 3) {
         var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
         
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
@@ -104,7 +104,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         });
         setGlobalValues(5, finalImage, 15);
     }
-    if (layerNum == 5){
+    if (layerNum == 5) {
         var query = {shoetype: shoeTypes, sNFTNumber :assignedNFT};
         
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {

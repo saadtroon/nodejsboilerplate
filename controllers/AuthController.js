@@ -35,7 +35,6 @@ Listener.eventListenerRapid()
 			console.log("start",startlimit,endlimit,folder);
 			try {//../dist/1\ COMMON/json/
 				for(var i=startlimit;i<=endlimit;i++) {
-					console.log("loop");
 				fs.readFile("./dist/"+folder+"/"+i+".json", "utf8", (err, jsonString) => {
 				if (err) {
 					console.log("Error reading file from disk:", err);
@@ -128,6 +127,7 @@ exports.getFarms = [
 			farms.forEach(async function (farm){
 
 				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending"){
+					console.log("--------------------"+farm.categoryName);
 
 					switch(farm.categoryName){
 						case "COMMON":
@@ -140,10 +140,22 @@ exports.getFarms = [
 							});
 							break;
 						case "UNIQUE":
-							uniqueService
+							farm  = await uniqueService(farm);
+							farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
+								if (!err) { console.log("Farm updated successfully"); }
+								else {
+									console.log("Farm updation failed", err);
+								}
+							});
 							break;
 						case "RARE":
-							rareService
+							farm  = await rareService(farm);
+							farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
+								if (!err) { console.log("Farm updated successfully"); }
+								else {
+									console.log("Farm updation failed", err);
+								}
+							});
 							break;
 						case "EPIC":
 							epicService
@@ -170,7 +182,7 @@ exports.getFarms = [
 			});
 
 		});
-		console.log("farm");
+		console.log("farm--------------");
 
 		// ShoefyModel.find(query).then(shoefy => {
 		// 	console.log("shoefy::",shoefy)

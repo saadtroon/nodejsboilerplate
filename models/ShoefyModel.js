@@ -19,6 +19,7 @@ var ShoefySchema = new Schema({
 	assetShoe: {type: String, required: false},
 	assetLayer: {type: String, required: false},
 	shoeSideColourGradient: {type: String, required: false},
+	shoeSideColour: {type: String, required: false},
 	sNFTNumber: {type: Number, required: false}, // shoefyNFTIdcl
 }, {timestamps: true});
 

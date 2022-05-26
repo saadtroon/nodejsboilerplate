@@ -106,12 +106,14 @@ const CategoryCounterModel = require("../models/CategoryCounterModel");
             var type;
             console.log(data.returnValues);
             type = determineType(data.returnValues[1])
-            var query = {categoryName: type};
+            var query = {categoryName: type.toLowerCase()};
             var nextUpdatedTimestamp = Date.now();
             console.log("before",nextUpdatedTimestamp);
             nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
             console.log("after",nextUpdatedTimestamp);
         CategoryDetailModel.find(query).then(category => {
+            console.log("query:",query);
+            console.log("category:",category);
             var farm = new Farm (
             { 
                 userAddress: data.returnValues[0],
