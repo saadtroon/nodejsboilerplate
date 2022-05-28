@@ -154,7 +154,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             baseImage = await stichImages(baseImage, firstLayer);
             return baseImage;
         });
-        setGlobalValues(7, finalImage, 15);
+        setGlobalValues(7, finalImage, 30);
     }
 
     if (layerNum == 7) {
@@ -180,7 +180,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             return baseImage;
         });
-        setGlobalValues(8, finalImage, 15);
+        setGlobalValues(8, finalImage, 30);
     }
 }
 
