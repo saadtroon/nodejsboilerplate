@@ -129,7 +129,7 @@ exports.getFarms = [
 				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending"){
 					console.log("--------------------"+farm.categoryName);
 
-					switch(farm.categoryName){
+					switch(farm.categoryName) {
 						case "COMMON":
 							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
 								farm  = await commonService(farm);
@@ -147,19 +147,29 @@ exports.getFarms = [
 							}
 							break;
 						case "EPIC":
-							epicService
+							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+								farm  = await epicService(farm);
+							}
 							break;
 						case "LEGENDARY":
-							legendaryService
+							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+								farm  = await legendaryService(farm);
+							}
 							break;
 						case "MYTHICGOD":
-							mythicgodService
+							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+								farm  = await mythicgodService(farm);
+							}
 							break;
 						case "MYTHICDEVIL":
-							mythicdevilService
+							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+								farm  = await mythicdevilService(farm);
+							}
 							break;
 						case "MYTHICALIEN":
-							mythicalienService
+							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+								farm  = await mythicalienService(farm);
+							}
 							break;
 
 					}

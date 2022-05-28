@@ -10,9 +10,11 @@ let oneday = 86400000;
 var error = "";
 
 async function stichService(farm) {
+        console.log("stiching legendary");
         await stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT, farm.image);
         farm.image = gImage;
         farm.currentLayer = glayerNumbers;
+        console.log("farm:",farm.currentLayer)
         let timestamp =  parseInt( farm.nextUpdatedTimestamp );
         timestamp = timestamp + (gtime * oneday);
         farm.nextUpdatedTimestamp = timestamp.toString();
@@ -30,7 +32,10 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
 		var finalImage;
 
         finalImage = await ShoefyModel.find(query).then(async function(shoefy) {
-            ImagesModel.find(query)
+            ImagesModel.find(query);
+            if(shoefy.length <= 0) {
+                console.log("error in query:",query);
+            }
             query = { layerNum: 1, shoeType: shoeTypes, categoryName: shoefy[0].categoryName.toUpperCase(), imageName:shoefy[0].background}
                 return await ImagesModel.find(query).then(async function(images) {
                     return images[0].image;

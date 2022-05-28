@@ -40,7 +40,9 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                     // ==============
                     var nextUpdatedTimestamp = Date.now();
                     nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
-
+                        if(category.length <= 0) {
+                            console.log("no Category Detail Model row found:", query)
+                        }
                         var farm = new Farm (
                             {   userAddress: data.returnValues[0],
                                 categoryName: type,
