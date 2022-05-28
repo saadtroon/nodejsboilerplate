@@ -27,6 +27,17 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                 var query = {categoryName: type.toLowerCase()};
                 var counter;
                 CategoryDetailModel.find(query).then(category => {
+                    
+                    let index = parseInt(randomNumber(0, category[0].availableNFTs.length)); 
+                    let indexNum = category[0].availableNFTs[index];
+
+                    if(index == category[0].availableNFTs.length-1){
+                        category[0].availableNFTs.pop();
+                    }else{
+                        category[0].availableNFTs[index] = category[0].availableNFTs.pop()
+                    }
+
+                    // ==============
                     var nextUpdatedTimestamp = Date.now();
                     nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
                         if(category.length <= 0) {
@@ -39,7 +50,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                                 farmId: data.returnValues[2],
                                 typeNFT: "general",
                                 mintStatus: "Pending",
-                                assignedNFT: category[0].counterNFT,
+                                assignedNFT: indexNum,
                                 nextUpdatedTimestamp: nextUpdatedTimestamp,
                             } );
                             counter = category[0].counterNFT
@@ -49,7 +60,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                                 if (err) { console.log("error:",err); }
                                 console.log("saved Successfully with farm ID:", data.returnValues[2]);
                                 CategoryDetailModel.findOneAndUpdate(query,
-                                    { $set: { counterNFT: (parseInt(category[0].counterNFT)+1)}},
+                                    { $set: { availableNFTs: category[0].availableNFTs}},
                                     (err, doc) => {
                                         if (err) {
                                             console.log("Something wrong when updating data!",err,doc);
@@ -109,12 +120,18 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
             type = determineType(data.returnValues[1])
             var query = {categoryName: type.toLowerCase()};
             var nextUpdatedTimestamp = Date.now();
-            console.log("before",nextUpdatedTimestamp);
-            nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
-            console.log("after",nextUpdatedTimestamp);
+            nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 86400000);
+
+            let index = parseInt(randomNumber(0, category[0].availableNFTs.length)); 
+            let indexNum = category[0].availableNFTs[index];
+
+            if(index == category[0].availableNFTs.length-1){
+                category[0].availableNFTs.pop();
+            }else{
+                category[0].availableNFTs[index] = category[0].availableNFTs.pop()
+            }
+
         CategoryDetailModel.find(query).then(category => {
-            console.log("query:",query);
-            console.log("category:",category);
             var farm = new Farm (
             { 
                 userAddress: data.returnValues[0],
@@ -123,7 +140,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                 farmId: data.returnValues[2],
                 typeNFT: "rapid",
                 mintStatus: "Pending",
-                assignedNFT: category[0].counterNFT,
+                assignedNFT: indexNum,
                 nextUpdatedTimestamp: nextUpdatedTimestamp,
             });
 
@@ -134,7 +151,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                     if (err) { console.log("error:",err); }
                     console.log("saved Successfully with farm ID:", data.returnValues[2]);
                     CategoryDetailModel.findOneAndUpdate(query,
-                        { $set: { counterNFT: (parseInt(category[0].counterNFT)+1)}},
+                        { $set: { availableNFTs: category[0].availableNFTs}},
                         (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data!",err,doc);
@@ -167,7 +184,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
 
 
 
- ///// extra functions
+ ///// helper functions
 
 
  function determineType(returnValue){
@@ -198,3 +215,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
     }
     return type;
  }
+
+ function randomNumber(min, max) {
+    return Math.random() * (max - min) + min;
+}
