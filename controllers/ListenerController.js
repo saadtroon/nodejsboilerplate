@@ -13,7 +13,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
 		try {
             var abi = [{"inputs":[{"internalType":"address","name":"shoefyContract_","type":"address"},{"internalType":"string[]","name":"categories_","type":"string[]"},{"internalType":"uint256[]","name":"totalGeneralNFTs","type":"uint256[]"},{"internalType":"uint256[]","name":"totalRapidNFTs","type":"uint256[]"},{"internalType":"uint256[]","name":"generalFarmTimes_","type":"uint256[]"},{"internalType":"uint256[]","name":"rapidFarmtimes_","type":"uint256[]"},{"internalType":"uint256[]","name":"generalTokensRequired_","type":"uint256[]"},{"internalType":"uint256[]","name":"rapidTokensRequired_","type":"uint256[]"},{"internalType":"address","name":"_signerAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"","type":"address"},{"indexed":false,"internalType":"bytes32","name":"","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"","type":"uint256"}],"name":"GeneralNFTFarmed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"","type":"address"},{"indexed":false,"internalType":"bytes32","name":"","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"","type":"uint256"}],"name":"RapidNFTFarmed","type":"event"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"farmCategory","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"category_","type":"bytes32"},{"internalType":"uint256","name":"farmAmount_","type":"uint256"}],"name":"farmGeneral","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"farmHarvested","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"farmId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"farmOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"category_","type":"bytes32"},{"internalType":"uint256","name":"farmAmount_","type":"uint256"}],"name":"farmRapid","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"farmTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"farmType","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"generalFarm","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"generalFarmTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"generalFarmsLeft","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"generalTokensRequired","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"farmIds_","type":"uint256[]"},{"internalType":"bytes[]","name":"signatures_","type":"bytes[]"}],"name":"harvestGeneral","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"farmIds_","type":"uint256[]"},{"internalType":"bytes[]","name":"signatures_","type":"bytes[]"}],"name":"harvestRapid","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rapidFarm","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"rapidFarmTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"rapidFarmsLeft","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"rapidTokensRequired","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"signerAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"totalLayers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_signerAddress","type":"address"}],"name":"updateSignerAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"userFarmLimit","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
             const web3 = new Web3('wss://rinkeby.infura.io/ws/v3/492fcc4da38f4eab99b315e2dfc3ae7d')
-            const contract =  new web3.eth.Contract((abi), '0x0Ab58257c7e876afbf67848b75ff77ea718842E8')
+            const contract =  new web3.eth.Contract((abi), '0x19F20312Cc5f028999302f67C5b9C0c314fCA66D')
             // Gemeral Farm
             contract.events.GeneralNFTFarmed(function (error, event) {
                 if (error) {
@@ -27,6 +27,17 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                 var query = {categoryName: type.toLowerCase()};
                 var counter;
                 CategoryDetailModel.find(query).then(category => {
+                    
+                    let index = parseInt(randomNumber(0, category[0].availableNFTs.length)); 
+                    let indexNum = category[0].availableNFTs[index];
+
+                    if(index == category[0].availableNFTs.length-1){
+                        category[0].availableNFTs.pop();
+                    }else{
+                        category[0].availableNFTs[index] = category[0].availableNFTs.pop()
+                    }
+
+                    // ==============
                     var nextUpdatedTimestamp = Date.now();
                     nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
 
@@ -37,7 +48,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                                 farmId: data.returnValues[2],
                                 typeNFT: "general",
                                 mintStatus: "Pending",
-                                assignedNFT: category[0].counterNFT,
+                                assignedNFT: indexNum,
                                 nextUpdatedTimestamp: nextUpdatedTimestamp,
                             } );
                             counter = category[0].counterNFT
@@ -47,7 +58,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                                 if (err) { console.log("error:",err); }
                                 console.log("saved Successfully with farm ID:", data.returnValues[2]);
                                 CategoryDetailModel.findOneAndUpdate(query,
-                                    { $set: { counterNFT: (parseInt(category[0].counterNFT)+1)}},
+                                    { $set: { availableNFTs: category[0].availableNFTs}},
                                     (err, doc) => {
                                         if (err) {
                                             console.log("Something wrong when updating data!",err,doc);
@@ -107,12 +118,18 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
             type = determineType(data.returnValues[1])
             var query = {categoryName: type.toLowerCase()};
             var nextUpdatedTimestamp = Date.now();
-            console.log("before",nextUpdatedTimestamp);
-            nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
-            console.log("after",nextUpdatedTimestamp);
+            nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 86400000);
+
+            let index = parseInt(randomNumber(0, category[0].availableNFTs.length)); 
+            let indexNum = category[0].availableNFTs[index];
+
+            if(index == category[0].availableNFTs.length-1){
+                category[0].availableNFTs.pop();
+            }else{
+                category[0].availableNFTs[index] = category[0].availableNFTs.pop()
+            }
+
         CategoryDetailModel.find(query).then(category => {
-            console.log("query:",query);
-            console.log("category:",category);
             var farm = new Farm (
             { 
                 userAddress: data.returnValues[0],
@@ -121,7 +138,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                 farmId: data.returnValues[2],
                 typeNFT: "rapid",
                 mintStatus: "Pending",
-                assignedNFT: category[0].counterNFT,
+                assignedNFT: indexNum,
                 nextUpdatedTimestamp: nextUpdatedTimestamp,
             });
 
@@ -132,7 +149,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
                     if (err) { console.log("error:",err); }
                     console.log("saved Successfully with farm ID:", data.returnValues[2]);
                     CategoryDetailModel.findOneAndUpdate(query,
-                        { $set: { counterNFT: (parseInt(category[0].counterNFT)+1)}},
+                        { $set: { availableNFTs: category[0].availableNFTs}},
                         (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data!",err,doc);
@@ -165,7 +182,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
 
 
 
- ///// extra functions
+ ///// helper functions
 
 
  function determineType(returnValue){
@@ -196,3 +213,7 @@ const CategoryDetailModel = require("../models/CategoryDetailModel");
     }
     return type;
  }
+
+ function randomNumber(min, max) {
+    return Math.random() * (max - min) + min;
+}

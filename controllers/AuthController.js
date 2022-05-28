@@ -201,23 +201,35 @@ exports.getFarms = [
 exports.addCategory = [
 	(req, res) => {
 		console.log("api requested", req.body);
-							// Create User object with escaped and trimmed data
-							var addCategory = new CategoryDetailModel(
-								{
-									categoryName: req.body.categoryName,
-									startNFTLimit: req.body.startNFTLimit, 
-									endNFTLimit: req.body.endNFTLimit,
-									counterNFT: req.body.startNFTLimit,
-								}
-							);
-		
-							addCategory.save(function (err) {
-								
-								if (err) { console.log("error", err); return apiResponse.ErrorResponse(res, err); 
-								};
 
-								return apiResponse.successResponseWithData(res,"Added.");
+		let availableNftList = []
+		let i,index = 0;
 
-							});
+
+		for (i = req.body.startNFTLimit; i<= req.body.endNFTLimit; i++){
+			availableNftList[index] = i;
+			index +=1;
+		}
+
+
+
+		var addCategory = new CategoryDetailModel(
+			{
+				categoryName: req.body.categoryName,
+				startNFTLimit: req.body.startNFTLimit, 
+				endNFTLimit: req.body.endNFTLimit,
+				counterNFT: req.body.startNFTLimit,
+				availableNFTs: availableNftList
+			}
+		);
+
+		addCategory.save(function (err) {
+			
+			if (err) { console.log("error", err); return apiResponse.ErrorResponse(res, err); 
+			};
+
+			return apiResponse.successResponseWithData(res,"Added.");
+
+		});
 	}
 ];
