@@ -21,7 +21,7 @@ const mythicgodService = require("../services/mythicgod");
 const mythicdevilService = require("../services/mythicdevil");
 const mythicalienService = require("../services/mythicalien");
 
-
+const signService = require("../services/sign");
 
 Listener.eventListener()
 Listener.eventListenerRapid()
@@ -233,3 +233,29 @@ exports.addCategory = [
 		});
 	}
 ];
+
+exports.getSigns = [
+	async (req,res) =>{
+		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category, mintStatus:"Complete"};
+		let farmIds =  req.body.farmIds;
+		let resp = []
+		let msgHash, verificationSign;
+
+		resp = await farmModel.find(query).then(async function(farms) {
+			farms.forEach(async function (farm){
+
+				if (farmIds.includes(farm.farmId)){
+					msgHash = signService.getmessageHash(req.params.userAddress, farm.farmId, farm.assignedNFT);
+					verificationSign = signService.signMessage(msgHash, process.env.SIGNER_ADDRESS, process.env.SIGNER_PK);
+					resp.push({farmId: farm.farmId, sign: verificationSign.signature});
+				}
+			});
+			return resp;
+		});
+
+		console.log(resp);
+		return apiResponse.successResponseWithData(res, resp);
+
+	}
+];
+
