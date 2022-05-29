@@ -1,15 +1,10 @@
-const UserModel = require("../models/UserModel");
 const ShoefyModel = require("../models/ShoefyModel");
 const CategoryDetailModel = require("../models/CategoryDetailModel");
 const Listener = require("./ListenerController");
 const farmModel = require("../models/FarmModel");
-const { body,validationResult } = require("express-validator");
-const { sanitizeBody } = require("express-validator");
+
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const utility = require("../helpers/utility");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 const commonService = require("../services/common");
@@ -215,8 +210,6 @@ exports.addCategory = [
 			availableNftList[index] = i;
 			index +=1;
 		}
-
-
 
 		var addCategory = new CategoryDetailModel(
 			{

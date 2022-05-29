@@ -7,7 +7,7 @@ var CategoryDeatilSchema = new Schema({
 	startNFTLimit: {type: Number, required: true}, 
 	endNFTLimit: {type: Number, required: true},   
 	counterNFT: {type: Number, required: true},    
-	availableNFTs:{type: Number, value: [Number], required: false},
+	availableNFTs:[Number],
 }, {timestamps: true});
 
 module.exports = mongoose.model("CategoryDetail", CategoryDeatilSchema);
