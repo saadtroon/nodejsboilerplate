@@ -116,7 +116,7 @@ Listener.eventListenerRapid()
  */
 exports.getFarms = [
 	(req, res) => {
-		try{
+		try {
 		console.log("calling getFarms:");
 		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category };
 		
@@ -126,65 +126,94 @@ exports.getFarms = [
 			
 			farms.forEach(async function (farm){
 
-				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending"){
+				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending") {
 					console.log("--------------------"+farm.categoryName);
-
-					switch(farm.categoryName) {
-						case "COMMON":
-							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
-								farm  = await commonService(farm);
-							}
-							break;
-							
-						case "UNIQUE":
-							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
-								farm  = await uniqueService(farm);
-							}
-							break;
-						case "RARE":
-							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
-								farm  = await rareService(farm);
-							}
-							break;
-						case "EPIC":
-							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
-								farm  = await epicService(farm);
-							}
-							break;
-						case "LEGENDARY":
-							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
-								farm  = await legendaryService(farm);
-							}
-							break;
-						case "MYTHICGOD":
-							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
-								farm  = await mythicgodService(farm);
-							}
-							break;
-						case "MYTHICDEVIL":
-							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
-								farm  = await mythicdevilService(farm);
-							}
-							break;
-						case "MYTHICALIEN":
-							while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
-								farm  = await mythicalienService(farm);
-							}
-							break;
-
-					}
-
-					farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
-						if (!err) { console.log("Farm updated successfully"); }
-						else {
-							console.log("Farm updation failed", err);
+					if (farm.typeNFT == "general") {
+						switch(farm.categoryName) {
+							case "COMMON":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await commonService(farm);
+								}
+								break;
+								
+							case "UNIQUE":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await uniqueService(farm);
+								}
+								break;
+							case "RARE":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await rareService(farm);
+								}
+								break;
+							case "EPIC":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await epicService(farm);
+								}
+								break;
+							case "LEGENDARY":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await legendaryService(farm);
+								}
+								break;
+							case "MYTHICGOD":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await mythicgodService(farm);
+								}
+								break;
+							case "MYTHICDEVIL":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await mythicdevilService(farm);
+								}
+								break;
+							case "MYTHICALIEN":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await mythicalienService(farm);
+								}
+								break;
 						}
-					});
+
+						farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
+							if (!err) { console.log("Farm updated successfully"); }
+							else {
+								console.log("Farm updation failed", err);
+							}
+						});
+
+					} else if(farm.typeNFT == "rapid") {
+						switch(farm.categoryName) {
+							case "COMMON":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await commonRapidService(farm);
+								}
+								break;
+								
+							case "UNIQUE":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await uniqueRapidService(farm);
+								}
+								break;
+							case "RARE":
+								while(farm.mintStatus == "Pending" && farm.nextUpdatedTimestamp < Date.now()){
+									farm  = await rareRapidService(farm);
+								}
+								break;
+
+						}
+						
+						farmModel.findByIdAndUpdate({ _id: farm._id }, farm, { new: true }, (err, doc) => {
+							if (!err) { console.log("Farm updated successfully"); }
+							else {
+								console.log("Farm updation failed", err);
+							}
+						});
 					
-				}else{
+				    } 
+				} else{
 					console.log(farm);
 					response.push(farm);
-				}
+					}
+				
 			});
 
 		});
