@@ -188,11 +188,6 @@ exports.getFarms = [
 			});
 
 		});
-		console.log("farm--------------");
-
-		// ShoefyModel.find(query).then(shoefy => {
-		// 	console.log("shoefy::",shoefy)
-		// });
 		return apiResponse.successResponse(res, {result: response});
 
 	} catch(e){
