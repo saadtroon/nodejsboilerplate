@@ -29,10 +29,13 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
       
         var query = {shoetype: shoeTypes, sNFTNumber: assignedNFT};
 		var finalImage;
-
+        console.log("query:",query);
         baseImage = await ShoefyModel.find(query).then(async function(shoefy) {
             ImagesModel.find(query);
-
+            if (shoefy.length <= 0){
+                console.log("Please add images of this category:");
+            }
+            console.log("shoefy:",shoefy)
             query = { layerNum: 1, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), imageName:shoefy[0].background}
             
                 return await ImagesModel.find(query).then(async function(images) {
@@ -44,24 +47,27 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         }, function(err) {
             console.log(err);
         });
-        
+        query = {shoetype: shoeTypes, sNFTNumber: assignedNFT};
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
             ImagesModel.find(query);
+            if (shoefy.length <= 0) {
+                console.log("shoefy length undefined");
+            }
 
             var query1 = { layerNum: 2, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), imageName:shoefy[0].baseShoe}
-            var query2 = { layerNum: 3, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"FRONT",imageName: shoefy[0].front}
-            var query3 = { layerNum: 4, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), traitType:"SIDE",imageName: shoefy[0].side}
+            var query2 = { layerNum: 3, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), imageName: shoefy[0].pattern}
+            var query3 = { layerNum: 4, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), imageName: shoefy[0].shoeSideColourGradient}
             
             let firstLayer =  await ImagesModel.find(query1).then(async function(images) {
                 return images[0].image;
             }, function(err) {
-                console.log(err);
+                console.log("query1",query1,err);
             });
-
+            console.log("query2:",query2);
             let secondLayer = await ImagesModel.find(query2).then(async function(images) {
                 return images[0].image;
             }, function(err) {
-                console.log(err);
+                console.log("query2",query2,err);
             });
 
             let thirdLayer = await ImagesModel.find(query3).then(async function(images) {
@@ -88,7 +94,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
             ImagesModel.find(query)
 
-            query = { layerNum: 5, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].back}
+            query = { layerNum: 5, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].front}
             
             let firstLayer =  await ImagesModel.find(query).then(async function(images) {
                 if (images.length <= 0 ){
@@ -100,7 +106,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
                 console.log(err);
             });
 
-            query = { layerNum: 6, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].back}
+            query = { layerNum: 6, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].side}
 
             let secondLayer =  await ImagesModel.find(query).then(async function(images) {
                 if (images.length <= 0 ){
@@ -133,6 +139,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         });
         setGlobalValues(7, finalImage, 15);
     
+    }
 }
 
 function setGlobalValues(layer, image, days){
@@ -142,7 +149,7 @@ function setGlobalValues(layer, image, days){
 }
 
 
-async function stichImages(img1, img2){
+async function stichImages(img1, img2) {
     const MIME_TYPE = 'image/png';
     
     const image = await Jimp.read(Buffer.from(img1, 'base64'));

@@ -44,7 +44,9 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         }, function(err) {
             console.log(err);
         });
-        
+        query = {shoetype: shoeTypes, sNFTNumber: assignedNFT};
+
+        console.log("query:",query);
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
             ImagesModel.find(query);
 

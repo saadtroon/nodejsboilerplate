@@ -15,11 +15,13 @@ const epicService = require("../services/epic");
 const mythicgodService = require("../services/mythicgod");
 const mythicdevilService = require("../services/mythicdevil");
 const mythicalienService = require("../services/mythicalien");
+const commonRapidService = require("../services/commonRapid");
+const uniqueRapidService = require("../services/uniqueRapid");
 
 const signService = require("../services/sign");
 
-Listener.eventListener()
-Listener.eventListenerRapid()
+Listener.eventListener();
+Listener.eventListenerRapid();
 
 	exports.dataDumping= [
 		(req, res) => {
@@ -113,12 +115,12 @@ exports.getFarms = [
 	(req, res) => {
 		try {
 		console.log("calling getFarms:");
-		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category };
+		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category.toUpperCase() };
 		
 		let response = [];
 		
 		farmModel.find(query).then(async function(farms) {
-			
+			console.log("famrs length:",farms.length);
 			farms.forEach(async function (farm){
 
 				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending") {
