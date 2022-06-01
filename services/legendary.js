@@ -35,7 +35,9 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             ImagesModel.find(query);
             if(shoefy.length <= 0) {
                 console.log("error in query:",query);
+                return;
             }
+            console.log("we here" ,shoefy.length);
             query = { layerNum: 1, shoeType: shoeTypes, categoryName: shoefy[0].categoryName.toUpperCase(), imageName:shoefy[0].background}
                 return await ImagesModel.find(query).then(async function(images) {
                     return images[0].image;

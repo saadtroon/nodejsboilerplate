@@ -112,15 +112,15 @@ Listener.eventListenerRapid();
  * @returns {Object}
  */
 exports.getFarms = [
-	(req, res) => {
+	async (req, res) => {
 		try {
 		console.log("calling getFarms:");
 		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category.toUpperCase() };
 		
 		let response = [];
 		
-		farmModel.find(query).then(async function(farms) {
-			console.log("famrs length:",farms.length);
+		response = await farmModel.find(query).then(async function(farms) {
+
 			farms.forEach(async function (farm){
 
 				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending") {
@@ -205,15 +205,17 @@ exports.getFarms = [
 							}
 						});
 					
-				    } 
-				} else{
-					console.log(farm);
+				    }
 					response.push(farm);
-					}
-				
+					
+				} else{
+					response.push(farm);
+				}
 			});
+			return response;
 
 		});
+		console.log(response.length);
 		return apiResponse.successResponse(res, {result: response});
 
 	} catch(e){
@@ -274,7 +276,7 @@ exports.getSigns = [
 			farms.forEach(async function (farm){
 
 				if (farmIds.includes(farm.farmId)){
-					msgHash = signService.getmessageHash(req.params.userAddress, farm.farmId, farm.assignedNFT);
+					msgHash = signService.getmessageHash(req.params.userAddress, farm.farmId, "tokenurl/"+farm.farmId);
 					verificationSign = signService.signMessage(msgHash, process.env.SIGNER_ADDRESS, process.env.SIGNER_PK);
 					resp.push({farmId: farm.farmId, sign: verificationSign.signature});
 				}
@@ -282,7 +284,6 @@ exports.getSigns = [
 			return resp;
 		});
 
-		console.log(resp);
 		return apiResponse.successResponseWithData(res, resp);
 
 	}
