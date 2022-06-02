@@ -22,6 +22,8 @@ const signService = require("../services/sign");
 
 Listener.eventListener();
 Listener.eventListenerRapid();
+Listener.eventListenerHarvestGeneral();
+Listener.eventListenerHarvestRapid();
 
 	exports.dataDumping= [
 		(req, res) => {
@@ -267,7 +269,7 @@ exports.addCategory = [
 
 exports.getSigns = [
 	async (req,res) =>{
-		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category, mintStatus:"Complete"};
+		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category, mintStatus:"Completed"};
 		let farmIds =  req.body.farmIds;
 		let resp = []
 		let msgHash, verificationSign;

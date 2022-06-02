@@ -16,7 +16,7 @@ async function stichService(farm) {
         let timestamp =  parseInt( farm.nextUpdatedTimestamp );
         timestamp = timestamp + (gtime * oneday);
         farm.nextUpdatedTimestamp = timestamp.toString();
-        if (glayerNumbers == 8) {farm.mintStatus = "Complete"}
+        if (glayerNumbers == 8) {farm.mintStatus = "Completed"}
         return farm;
     
     }

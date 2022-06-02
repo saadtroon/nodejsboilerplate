@@ -3,6 +3,7 @@ const Web3 = require('web3');
 const fs = require("fs");
 const Farm = require("../models/FarmModel");
 const CategoryDetailModel = require("../models/CategoryDetailModel");
+
 /**
  * Book List.
  * 
@@ -16,19 +17,22 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
  exports.eventListener = 
 	async function () {
 		try {
-            console.log("General Farm listner started");
-            // Gemeral Farm
+       
+            // General Farm
             contract.events.GeneralNFTFarmed(function (error, event) {
                 if (error) {
                     return error;
                 } 
-            }).on('data', function (data) {
+            }).on('data', async function (data) {
 
                 var type;
                 type = determineType(data.returnValues[1])
 
                 var query = {categoryName: type.toLowerCase()};
                 var counter;
+                var res =await Farm.findOne( {farmId: data.returnValues[2]} )
+
+
                 CategoryDetailModel.find(query).then(category => {
                     
                     let index = parseInt(randomNumber(0, category[0].availableNFTs.length)); 
@@ -55,25 +59,30 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
                                 typeNFT: "general",
                                 mintStatus: "Pending",
                                 assignedNFT: indexNum,
+                                txHash: data.transactionHash,
                                 nextUpdatedTimestamp: nextUpdatedTimestamp,
                             } );
                             counter = category[0].counterNFT
-
-                            //Save book.assignedNFT
-                            farm.save(function (err) {
-                                if (err) { console.log("error:",err); }
-                                console.log("saved Successfully with farm ID:", data.returnValues[2]);
-                                CategoryDetailModel.findOneAndUpdate(query,
-                                    { $set: { availableNFTs: category[0].availableNFTs}},
-                                    (err, doc) => {
-                                        if (err) {
-                                            console.log("Something wrong when updating data!",err,doc);
+                            if (res !== null ) {
+                                console.log("duplicate",farm.farmId);
+                                return;
+                            } else {
+                                //Save book.assignedNFT
+                                farm.save(function (err) {
+                                    if (err) { console.log("error:",err); }
+                                    console.log("saved Successfully with farm ID:", data.returnValues[2]);
+                                    CategoryDetailModel.findOneAndUpdate(query,
+                                        { $set: { availableNFTs: category[0].availableNFTs}},
+                                        (err, doc) => {
+                                            if (err) {
+                                                console.log("Something wrong when updating data!",err,doc);
+                                            }
+                                        
+                                            // console.log("success updated:",doc);
                                         }
-                                    
-                                        // console.log("success updated:",doc);
-                                    }
-                                )
-                            });
+                                    )
+                                });
+                            }
                 });
             })
             .on('changed', (event) => {
@@ -99,8 +108,8 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
 	};
 
 
-    /**
- * Book List.
+/**
+ * Event Listener Rapid
  * 
  * @returns {Object}
  */
@@ -183,6 +192,97 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
 
 
 
+ /**
+ * Event Listener Harvest general
+ * 
+ * @returns {Object}
+ */
+  exports.eventListenerHarvestGeneral = 
+  async function () {
+      try {
+          console.log("General Farm listner started");
+         // Rapid Farm
+         contract.events.GeneralNFTMinted(function (error, event) {
+         if (error) {
+             return error;
+         } 
+         }).on('data',async function (data) {
+           // console.log("event occured:",data)
+            console.log(data.returnValues);
+            var query = {farmId: data.returnValues[2], mintStatus: "Completed"};
+            Farm.findOneAndUpdate(query,
+                { $set: { mintStatus: "Minted"}},
+                (err, doc) => {
+                    if (err) {
+                        console.log("Something wrong when updating data!",err,doc);
+                    }
+                
+                    // console.log("success updated:",doc);
+                }
+            )
+         });           
+ 
+     console.log("end");
+     await new Promise(resolve =>  {
+         setTimeout(()=> resolve), 9000000000000});
+   
+     let promise = new Promise((resolve, reject) => {
+       setTimeout(() => resolve("done!"), 9000000000000)
+     });
+     console.log("yeah")
+     } catch (err) {
+         //throw error in json response with status 500. 
+         console.log("error", err);
+         return;
+     }
+  };
+ 
+ 
+
+   /**
+ * Event Listener Harvest Rapid
+ * 
+ * @returns {Object}
+ */
+    exports.eventListenerHarvestRapid = 
+    async function () {
+        try {
+            console.log("Rapid Farm listner started");
+           // Rapid Farm
+           contract.events.RapidNFTMinted(function (error, event) {
+           if (error) {
+               return error;
+           } 
+           }).on('data', function (data) {
+            console.log(data.returnValues);
+            var query = {farmId: data.returnValues[2], mintStatus: "Completed"};
+            Farm.findOneAndUpdate(query,
+                { $set: { mintStatus: "Minted"}},
+                (err, doc) => {
+                    if (err) {
+                        console.log("Something wrong when updating data!",err,doc);
+                    }
+                
+                    // console.log("success updated:",doc);
+                }
+            )
+  
+           });           
+   
+       console.log("end");
+       await new Promise(resolve =>  {
+           setTimeout(()=> resolve), 9000000000000});
+     
+       let promise = new Promise((resolve, reject) => {
+         setTimeout(() => resolve("done!"), 9000000000000)
+       });
+       console.log("yeah")
+       } catch (err) {
+           //throw error in json response with status 500. 
+           console.log("error", err);
+           return;
+       }
+    };
 
 
 
