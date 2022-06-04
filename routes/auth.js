@@ -11,5 +11,6 @@ router.get("/getSigns/userAddress/:userAddress/typeNFT/:NFTType/category/:catego
 router.post("/addCategory", AuthController.addCategory);
 router.post("/saveImages", ImagesController.saveImages);
 router.get("/displayImages",ImagesController.displayImages);
+router.get("/updateJSON", ImagesController.updateJSON);
 
 module.exports = router;

@@ -118,3 +118,52 @@ exports.displayImages = [
 
 	}
 ];
+
+exports.updateJSON = [
+	async function (req, res) {
+
+		try {
+			let startlimit = 1;
+			let endlimit = 3;
+			for(var i=startlimit;i<=endlimit;i++) {
+				console.log("limit:",i);
+				var path = "./dist/1 COMMON/json/"+i+".json"
+				jsonReader(path,async function(err, customer) {
+					if (err) {
+						console.log("Error reading file:", err);
+						return;
+					}
+				//	console.log("err, customer:",err, customer);
+
+					customer.image = "https://shoefy-nft.mypinata.cloud/ipfs/QmdrRrViLGLq5yXdqQLifi7GnmuCuQysEMWrMFU3aCFMAM/"+i+".png"
+				//	console.log("customer:",customer)
+					fs.writeFile(path, JSON.stringify(customer),async function(error, result) {
+						console.log("error:",error,result);
+						if (err) console.log("Error writing file:", error);
+					});
+				});
+				setTimeout(() => console.log(`#${i}`), 1000);
+			}
+		return apiResponse.successResponse(res,"Account confirmed success.");
+			
+		} catch (err) {
+			console.log("error:",err);
+			//throw error in json response with status 500. 
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+function jsonReader(filePath, cb) {
+	fs.readFile(filePath, (err, fileData) => {
+	  if (err) {
+		return cb && cb(err);
+	  }
+	  try {
+		const object = JSON.parse(fileData);
+		return cb && cb(null, object);
+	  } catch (err) {
+		return cb && cb(err);
+	  }
+	});
+  }
