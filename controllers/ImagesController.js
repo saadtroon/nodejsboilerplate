@@ -124,25 +124,13 @@ exports.updateJSON = [
 
 		try {
 			let startlimit = 1;
-			let endlimit = 3;
+			let endlimit = 10;
 			for(var i=startlimit;i<=endlimit;i++) {
 				console.log("limit:",i);
 				var path = "./dist/1 COMMON/json/"+i+".json"
-				jsonReader(path,async function(err, customer) {
-					if (err) {
-						console.log("Error reading file:", err);
-						return;
-					}
-				//	console.log("err, customer:",err, customer);
-
-					customer.image = "https://shoefy-nft.mypinata.cloud/ipfs/QmdrRrViLGLq5yXdqQLifi7GnmuCuQysEMWrMFU3aCFMAM/"+i+".png"
-				//	console.log("customer:",customer)
-					fs.writeFile(path, JSON.stringify(customer),async function(error, result) {
-						console.log("error:",error,result);
-						if (err) console.log("Error writing file:", error);
-					});
-				});
-				setTimeout(() => console.log(`#${i}`), 1000);
+				readFile(path,i).then(res => {
+					console.log("successfully updated:");
+				}).catch(err => console.log(err));
 			}
 		return apiResponse.successResponse(res,"Account confirmed success.");
 			
@@ -154,7 +142,38 @@ exports.updateJSON = [
 	}
 ];
 
-function jsonReader(filePath, cb) {
+async function getData(customer,path) {
+	fs.writeFile(path, customer,async function(error, result) {
+		console.log("error:",error,result);
+		if (err) console.log("Error writing file:", error);
+	});
+}
+
+const readFile = async(path,i) =>{
+	
+	
+	return new Promise((resolve, reject) => {
+		jsonReader(path,async function(err, jsonFiles) {
+			if (err) {
+				console.log("Error reading file:", err);
+				return;
+			}
+		if (jsonFiles) {
+			jsonFiles.image = "https://shoefy-nft.mypinata.cloud/ipfs/QmdrRrViLGLq5yXdqQLifi7GnmuCuQysEMWrMFU3aCFMAM/"+i+".png";
+			fs.writeFile(path, JSON.stringify(jsonFiles),async function(error, result) {
+				if (err) console.log("Error writing file:", error);
+			});
+		  resolve(jsonFiles);
+		  
+		  return jsonFiles;
+		} else {
+		  reject("Promise rejected");
+		  return ""
+		}
+	});
+	  });
+}
+const jsonReader = async(filePath, cb) => {
 	fs.readFile(filePath, (err, fileData) => {
 	  if (err) {
 		return cb && cb(err);
