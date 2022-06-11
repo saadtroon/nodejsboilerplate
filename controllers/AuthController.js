@@ -274,6 +274,10 @@ exports.getSigns = [
 		let resp = []
 		let msgHash, verificationSign;
 
+		if (typeof farmIds == 'undefined'){
+			return apiResponse.ErrorResponse(res, "Farm ids missing in req body");  
+		}
+
 		try{
 			resp = await farmModel.find(query).then(async function(farms) {
 				farms.forEach(async function (farm){
@@ -291,7 +295,6 @@ exports.getSigns = [
 		}catch(err){
 			return apiResponse.ErrorResponse(res, err);  
 		}
-
 
 
 	}
