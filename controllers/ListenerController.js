@@ -104,6 +104,21 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
               })
             .on('error', (e) => {
             console.log('--SomeEvent--Error',e);
+            })
+            .on('end', (e) => {
+                console.log('--SomeEvent--End',e);
+                })
+            .on('close', (e) => {
+            console.log('--SomeEvent--close',e);
+            })
+            .on('timeout', (e) => {
+                console.log('--SomeEvent--timeout',e);
+            })
+            .on('exit', (e) => {
+                console.log('--SomeEvent--exit',e);
+            })
+            .on('ready', (e) => {
+                console.log('--SomeEvent--Ready',e);
             });
 
         await new Promise(resolve =>  {
@@ -134,15 +149,14 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
         if (error) {
             return error;
         } 
-        }).on('data', function (data) {
+        }).on('data',async function (data) {
             var type;
             console.log(data.returnValues);
             type = determineType(data.returnValues[1])
             var query = {categoryName: type.toLowerCase()};
             var nextUpdatedTimestamp = Date.now();
             nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 86400000);
-
-           
+            var res =await Farm.findOne( {farmId: data.returnValues[2]} )           
 
         CategoryDetailModel.find(query).then(category => {
             
@@ -168,7 +182,10 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
             });
 
         counter = category[0].counterNFT
-
+        if (res !== null ) {
+            console.log("duplicate",farm.farmId);
+            return;
+        } else {
                 //Save book.assignedNFT
                 farm.save(function (err) {
                     if (err) { console.log("error:",err); }
@@ -184,6 +201,7 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
                         }
                     )
                 });
+            }
             });
         });           
 
