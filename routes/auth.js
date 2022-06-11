@@ -7,7 +7,7 @@ var router = express.Router();
 
 router.post("/dataDumping", AuthController.dataDumping);
 router.get("/getFarms/userAddress/:userAddress/typeNFT/:NFTType/category/:category", AuthController.getFarms);
-router.post("/getSigns/userAddress/:userAddress/typeNFT/:NFTType/category/:category", AuthController.getSigns);
+router.get("/getSigns/userAddress/:userAddress/typeNFT/:NFTType/category/:category", AuthController.getSigns);
 router.post("/addCategory", AuthController.addCategory);
 router.post("/saveImages", ImagesController.saveImages);
 router.get("/displayImages",ImagesController.displayImages);
