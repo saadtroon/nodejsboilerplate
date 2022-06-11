@@ -23,7 +23,7 @@ let options = {
 
 	reconnect: {
 		auto: true,
-		delay: 10000, // ms
+		delay: 1000, // ms
 		maxAttempts: 3,
 		onTimeout: false
 	}
