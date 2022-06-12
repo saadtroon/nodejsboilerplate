@@ -285,7 +285,7 @@ exports.getSigns = [
 					if (farmIds.includes(farm.farmId)){
 						msgHash = signService.getmessageHash(req.params.userAddress, farm.farmId, "tokenurl/"+farm.farmId);
 						verificationSign = signService.signMessage(msgHash, process.env.SIGNER_ADDRESS, process.env.SIGNER_PK);
-						resp.push({farmId: farm.farmId, sign: verificationSign.signature});
+						resp.push({farmId: farm.farmId, sign: verificationSign.signature, tokenURI: "ipfs.io/ipfs/abc"+farm.farmId});
 					}
 				});
 				return resp;
