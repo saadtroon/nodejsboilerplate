@@ -23,7 +23,7 @@ let options = {
 
 	reconnect: {
 		auto: true,
-		delay: 10000, // ms
+		delay: 1000, // ms
 		maxAttempts: 3,
 		onTimeout: false
 	}
@@ -34,7 +34,7 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
  exports.eventListener = 
 	async function () {
 		try {
-       
+            console.log("Listner started : General Farm");
             // General Farm
             contract.events.GeneralNFTFarmed(function (error, event) {
                 if (error) {
@@ -46,7 +46,6 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
                 type = determineType(data.returnValues[1])
 
                 var query = {categoryName: type.toLowerCase()};
-                var counter;
                 var res =await Farm.findOne( {farmId: data.returnValues[2]} )
 
 
@@ -61,7 +60,6 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
                         category[0].availableNFTs[index] = category[0].availableNFTs.pop()
                     }
 
-                    // ==============
                     var nextUpdatedTimestamp = Date.now();
                     nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
                         if(category.length <= 0) {
@@ -95,7 +93,6 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
                                                 console.log("Something wrong when updating data!",err,doc);
                                             }
                                         
-                                            // console.log("success updated:",doc);
                                         }
                                     )
                                 });
@@ -124,14 +121,12 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
                 console.log('--SomeEvent--Ready',e);
             });
 
-        console.log("end");
         await new Promise(resolve =>  {
             setTimeout(()=> resolve), 9000000000000});
       
         let promise = new Promise((resolve, reject) => {
           setTimeout(() => resolve("done!"), 9000000000000)
         });
-        console.log("yeah")
 		} catch (err) {
 			//throw error in json response with status 500. 
             console.log("error", err);
@@ -148,7 +143,7 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
  exports.eventListenerRapid = 
  async function () {
      try {
-         console.log("Rapid Farm listner started");
+         console.log("Listner started : Rapid Farm");
         // Rapid Farm
         contract.events.RapidNFTFarmed(function (error, event) {
         if (error) {
@@ -210,14 +205,14 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
             });
         });           
 
-    console.log("end");
+    // console.log("end");
     await new Promise(resolve =>  {
         setTimeout(()=> resolve), 9000000000000});
   
     let promise = new Promise((resolve, reject) => {
       setTimeout(() => resolve("done!"), 9000000000000)
     });
-    console.log("yeah")
+    // console.log("yeah")
     } catch (err) {
         //throw error in json response with status 500. 
         console.log("error", err);
@@ -235,7 +230,7 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
   exports.eventListenerHarvestGeneral = 
   async function () {
       try {
-          console.log("General Farm listner started");
+          console.log("Listner started : General harvest ");
          // Rapid Farm
          contract.events.GeneralNFTMinted(function (error, event) {
          if (error) {
@@ -257,14 +252,14 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
             )
          });           
  
-     console.log("end");
+    //  console.log("end");
      await new Promise(resolve =>  {
          setTimeout(()=> resolve), 9000000000000});
    
      let promise = new Promise((resolve, reject) => {
        setTimeout(() => resolve("done!"), 9000000000000)
      });
-     console.log("yeah")
+    //  console.log("yeah")
      } catch (err) {
          //throw error in json response with status 500. 
          console.log("error", err);
@@ -282,7 +277,7 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
     exports.eventListenerHarvestRapid = 
     async function () {
         try {
-            console.log("Rapid Farm listner started");
+            console.log("Listner started : Rapid harvest ");
            // Rapid Farm
            contract.events.RapidNFTMinted(function (error, event) {
            if (error) {
@@ -304,14 +299,14 @@ const contract =  new web3.eth.Contract((abi), '0x005152D60516D761112A284ec623FB
   
            });           
    
-       console.log("end");
+    //    console.log("end");
        await new Promise(resolve =>  {
            setTimeout(()=> resolve), 9000000000000});
      
        let promise = new Promise((resolve, reject) => {
          setTimeout(() => resolve("done!"), 9000000000000)
        });
-       console.log("yeah")
+    //    console.log("yeah")
        } catch (err) {
            //throw error in json response with status 500. 
            console.log("error", err);
