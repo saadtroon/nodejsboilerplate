@@ -123,12 +123,13 @@ exports.updateJSON = [
 	async function (req, res) {
 
 		try {
-			let startlimit = 1;
-			let endlimit = 10;
+			let startlimit = req.params.startLimit;
+			let endlimit = req.params.endLimit;
+			let folder = req.params.folderName;
 			for(var i=startlimit;i<=endlimit;i++) {
 				console.log("limit:",i);
-				var path = "./dist/1 COMMON/json/"+i+".json"
-				readFile(path,i).then(res => {
+				var path = "./dist/"+folder+"/json/"+i+".json"
+				readFile(path,i,req.params.ipfs).then(res => {
 					console.log("successfully updated:");
 				}).catch(err => console.log(err));
 			}
@@ -149,7 +150,7 @@ async function getData(customer,path) {
 	});
 }
 
-const readFile = async(path,i) =>{
+const readFile = async(path,i,ipfsHash) =>{
 	
 	
 	return new Promise((resolve, reject) => {
@@ -159,7 +160,7 @@ const readFile = async(path,i) =>{
 				return;
 			}
 		if (jsonFiles) {
-			jsonFiles.image = "https://shoefy-nft.mypinata.cloud/ipfs/QmdrRrViLGLq5yXdqQLifi7GnmuCuQysEMWrMFU3aCFMAM/"+i+".png";
+			jsonFiles.image = "https://shoefy-nft.mypinata.cloud/ipfs/"+ipfsHash+"/"+i+".png";
 			fs.writeFile(path, JSON.stringify(jsonFiles),async function(error, result) {
 				if (err) console.log("Error writing file:", error);
 			});
