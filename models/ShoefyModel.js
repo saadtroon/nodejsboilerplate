@@ -21,6 +21,7 @@ var ShoefySchema = new Schema({
 	shoeSideColourGradient: {type: String, required: false},
 	shoeSideColour: {type: String, required: false},
 	sNFTNumber: {type: Number, required: false}, // shoefyNFTIdcl
+	description: {type: String, required: false}
 }, {timestamps: true});
 
 module.exports = mongoose.model("Shoefy", ShoefySchema);

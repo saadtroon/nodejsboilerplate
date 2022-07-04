@@ -65,6 +65,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
                 console.log("error",err);
             });
             let secondLayer = await ImagesModel.find(query2).then(async function(images) {
+                console.log("updated");
                 return images[0].image;
             }, function(err) {
                 console.log("error",err);

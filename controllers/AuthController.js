@@ -34,7 +34,7 @@ Listener.eventListenerHarvestRapid();
 			console.log("start",startlimit,endlimit,folder);
 			try {//../dist/1\ COMMON/json/
 				for(var i=startlimit;i<=endlimit;i++) {
-				fs.readFile("./dist/"+folder+"/"+i+".json", "utf8", (err, jsonString) => {
+				fs.readFile("./dist/"+folder+"/json/"+i+".json", "utf8", (err, jsonString) => {
 				if (err) {
 					console.log("Error reading file from disk:", err);
 					return;
@@ -82,6 +82,7 @@ Listener.eventListenerHarvestRapid();
 							assetLayer: attributes.ASSETLASER,
 							shoeSideColourGradient: attributes.SHOESIDECOLOURGRADIENT,
 							sNFTNumber: information.edition,
+							description: information.description,
 						}
 					);
 
@@ -211,20 +212,33 @@ exports.getFarms = [
 					response.push(farm);
 					
 				} else{
-					let updatedFarm;
+					let updatedFarm = {
+						userAddress: "",
+						categoryName: "",
+						categoryBytes: "",
+						farmId: "",
+						typeNFT: "",
+						mintStatus:"",
+						assignedNFT: "",
+						currentLayer: "",
+						nextUpdatedTimestamp:"", 
+						txHash: "",
+						image: "",
+						description: "",
+						shoeType: ""
+					}
 					var quer = {sNFTNumber: farm.assignedNFT}
 					var newObj = await ShoefyModel.find(quer).then(async function(shopefi) {
 							return shopefi;
 						});
 						
-						updatedFarm = farm;
-						updatedFarm["description"] = newObj[0]['description'];
-						updatedFarm["categoryName"] = newObj[0]['categoryName'];  
-						
+						// updatedFarm = farm;
+						// console.log(newObj[0]['description'])
+						updatedFarm.description = newObj[0]['description'];
+						updatedFarm.shoeType = newObj[0]['categoryName'];  
 						updatedFarm.image = "";
 
-						console.log(newObj[0]['description'])
-						console.log(newObj[0])
+						// console.log(newObj[0])
 						response.push(updatedFarm);					
 				}
 			};
