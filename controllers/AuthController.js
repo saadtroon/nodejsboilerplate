@@ -34,7 +34,7 @@ Listener.eventListenerHarvestRapid();
 			console.log("start",startlimit,endlimit,folder);
 			try {//../dist/1\ COMMON/json/
 				for(var i=startlimit;i<=endlimit;i++) {
-				fs.readFile("./dist/"+folder+"/"+i+".json", "utf8", (err, jsonString) => {
+				fs.readFile("./dist/"+folder+"/json/"+i+".json", "utf8", (err, jsonString) => {
 				if (err) {
 					console.log("Error reading file from disk:", err);
 					return;
@@ -82,6 +82,7 @@ Listener.eventListenerHarvestRapid();
 							assetLayer: attributes.ASSETLASER,
 							shoeSideColourGradient: attributes.SHOESIDECOLOURGRADIENT,
 							sNFTNumber: information.edition,
+							description: information.description,
 						}
 					);
 
@@ -211,6 +212,13 @@ exports.getFarms = [
 					response.push(farm);
 					
 				} else{
+					var quer = {sNFTNumber: farm.assignedNFT}
+						var shoefyDescription;
+						ShoefyModel.find(quer).then(async function(shopefi) {
+							farm.mintStatus = shopefi.description;
+							console.log("farm",farm);
+							console.log("farm:",typeof farm);
+						});	
 					response.push(farm);
 				}
 			};
