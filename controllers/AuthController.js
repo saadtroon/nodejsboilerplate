@@ -120,10 +120,10 @@ exports.getFarms = [
 		var query = {userAddress: req.params.userAddress,typeNFT: req.params.NFTType, categoryName: req.params.category.toUpperCase() };
 		
 		let response = [];
-		
-		response = await farmModel.find(query).then(async function(farms) {
 
-			farms.forEach(async function (farm){
+		return await farmModel.find(query).then(async function(farms) {
+
+			for(farm of farms) {
 
 				if (Date.now() > farm.nextUpdatedTimestamp && farm.mintStatus == "Pending") {
 					console.log("--------------------"+farm.categoryName);
@@ -213,11 +213,11 @@ exports.getFarms = [
 				} else{
 					response.push(farm);
 				}
-			});
-			return response;
+			};
+			console.log(response.length);
+			return apiResponse.successResponse(res, {result: response});
 
 		});
-		console.log(response.length);
 		return apiResponse.successResponse(res, {result: response});
 
 	} catch(e){

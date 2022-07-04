@@ -10,6 +10,7 @@ let oneday = 86400000;
 
 
 async function stichService(farm) {
+
         await stichLayers(farm.currentLayer, farm.categoryName, farm.assignedNFT, farm.image);
         farm.image = gImage;
         farm.currentLayer = glayerNumbers;
@@ -17,6 +18,7 @@ async function stichService(farm) {
         timestamp = timestamp + (gtime * oneday);
         farm.nextUpdatedTimestamp = timestamp.toString();
         if (glayerNumbers == 6){farm.mintStatus = "Completed"}
+
         return farm;
     
     }
@@ -60,12 +62,12 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             let firstLayer =  await ImagesModel.find(query1).then(async function(images) {
                 return images[0].image;
             }, function(err) {
-                console.log(err);
+                console.log("error",err);
             });
             let secondLayer = await ImagesModel.find(query2).then(async function(images) {
                 return images[0].image;
             }, function(err) {
-                console.log(err);
+                console.log("error",err);
             });
 
             baseImage = await stichImages(baseImage, firstLayer);
