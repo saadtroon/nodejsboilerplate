@@ -1,5 +1,6 @@
 const ShoefyModel = require("../models/ShoefyModel");
 const CategoryDetailModel = require("../models/CategoryDetailModel");
+const FarmGetModel = require("../models/FarmGetModel");
 const Listener = require("./ListenerController");
 const farmModel = require("../models/FarmModel");
 
@@ -209,10 +210,8 @@ exports.getFarms = [
 						});
 					
 				    }
-					response.push(farm);
-					
-				} else{
-					let updatedFarm = {
+					let updatedFarm = new FarmGetModel (
+						{
 						userAddress: "",
 						categoryName: "",
 						categoryBytes: "",
@@ -225,20 +224,69 @@ exports.getFarms = [
 						txHash: "",
 						image: "",
 						description: "",
-						shoeType: ""
-					}
+						shoeType: "",
+						}
+					)
+					
 					var quer = {sNFTNumber: farm.assignedNFT}
 					var newObj = await ShoefyModel.find(quer).then(async function(shopefi) {
 							return shopefi;
 						});
 						
-						// updatedFarm = farm;
-						// console.log(newObj[0]['description'])
+					updatedFarm.currentLayer = farm.currentLayer;
+					updatedFarm.image = farm.image;
+					updatedFarm.userAddress = farm.userAddress;
+					updatedFarm.categoryName = farm.categoryName;
+					updatedFarm.categoryBytes = farm.categoryBytes;
+					updatedFarm.farmId = farm.farmId;
+					updatedFarm.typeNFT = farm.typeNFT;
+					updatedFarm.mintStatus = farm.mintStatus;
+					updatedFarm.assignedNFT = farm.assignedNFT;
+					updatedFarm.txHash = farm.txHash;
+					updatedFarm.nextUpdatedTimestamp = farm.nextUpdatedTimestamp;
+					updatedFarm.description = newObj[0]['description'];
+					updatedFarm.shoeType = newObj[0]['categoryName'];  
+					
+					response.push(updatedFarm);
+					
+				} else{
+					let updatedFarm = new FarmGetModel (
+						{
+						userAddress: "",
+						categoryName: "",
+						categoryBytes: "",
+						farmId: "",
+						typeNFT: "",
+						mintStatus:"",
+						assignedNFT: "",
+						currentLayer: "",
+						nextUpdatedTimestamp:"", 
+						txHash: "",
+						image: "",
+						description: "",
+						shoeType: "",
+						}
+					)
+					
+					var quer = {sNFTNumber: farm.assignedNFT}
+					var newObj = await ShoefyModel.find(quer).then(async function(shopefi) {
+							return shopefi;
+						});
+						
+						updatedFarm.currentLayer = farm.currentLayer;
+						updatedFarm.image = farm.image;
+						updatedFarm.userAddress = farm.userAddress;
+						updatedFarm.categoryName = farm.categoryName;
+						updatedFarm.categoryBytes = farm.categoryBytes;
+						updatedFarm.farmId = farm.farmId;
+						updatedFarm.typeNFT = farm.typeNFT;
+						updatedFarm.mintStatus = farm.mintStatus;
+						updatedFarm.assignedNFT = farm.assignedNFT;
+						updatedFarm.txHash = farm.txHash;
+						updatedFarm.nextUpdatedTimestamp = farm.nextUpdatedTimestamp;
 						updatedFarm.description = newObj[0]['description'];
 						updatedFarm.shoeType = newObj[0]['categoryName'];  
-						updatedFarm.image = "";
 
-						// console.log(newObj[0])
 						response.push(updatedFarm);					
 				}
 			};
