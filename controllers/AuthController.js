@@ -211,14 +211,27 @@ exports.getFarms = [
 					response.push(farm);
 					
 				} else{
-					response.push(farm);
+					let updatedFarm;
+					var quer = {sNFTNumber: farm.assignedNFT}
+					var newObj = await ShoefyModel.find(quer).then(async function(shopefi) {
+							return shopefi;
+						});
+						
+						updatedFarm = farm;
+						updatedFarm["description"] = newObj[0]['description'];
+						updatedFarm["categoryName"] = newObj[0]['categoryName'];  
+						
+						updatedFarm.image = "";
+
+						console.log(newObj[0]['description'])
+						console.log(newObj[0])
+						response.push(updatedFarm);					
 				}
 			};
 			console.log(response.length);
 			return apiResponse.successResponse(res, {result: response});
 
 		});
-		return apiResponse.successResponse(res, {result: response});
 
 	} catch(e){
 		console.log(e);
