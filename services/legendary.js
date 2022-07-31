@@ -195,7 +195,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
         finalImage = await ShoefyModel.find(query).then( async function(shoefy) {
             ImagesModel.find(query)
 
-            query = { layerNum: 9, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].accesories}
+            query = { layerNum: 9, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(),imageName:shoefy[0].accessories}
             
             let firstLayer =  await ImagesModel.find(query).then(async function(images) {
                 if (images.length <= 0 ) {

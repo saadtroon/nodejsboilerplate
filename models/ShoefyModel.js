@@ -14,10 +14,11 @@ var ShoefySchema = new Schema({
 	front: {type: String, required: false},
 	side: {type: String, required: false},
 	back: {type: String, required: false},
+	accessories: {type: String, required: false},
 	accesories: {type: String, required: false},
 	weapon: {type: String, required: false},
 	assetShoe: {type: String, required: false},
-	assetLayer: {type: String, required: false},
+	assetLaser: {type: String, required: false},
 	shoeSideColourGradient: {type: String, required: false},
 	shoeSideColour: {type: String, required: false},
 	sNFTNumber: {type: Number, required: false}, // shoefyNFTIdcl

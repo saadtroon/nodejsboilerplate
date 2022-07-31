@@ -62,13 +62,12 @@ Listener.eventListenerHarvestRapid();
 						attributes[information.attributes[i].trait_type.replace(/\s/g, "")] = (information.attributes[i].value.replace(/\s/g, ""));
 
 					}
-					
 					// Create User object with escaped and trimmed data
 					var shoe = new ShoefyModel(
 						{
 							shoetype: attributes.ShoeType,
 							categoryName:Category,
-							image: "/pinata"+information.image,
+							image: information.image,
 							background: attributes.BACKGROUND,
 							backgroundAsset: attributes.BACKGROUNDASSET,
 							baseShoe: attributes.BASESHOE,
@@ -77,11 +76,13 @@ Listener.eventListenerHarvestRapid();
 							front: attributes.FRONT,
 							side: attributes.SIDE,
 							back: attributes.BACK,
+							accessories: attributes.ACCESSORIES,
 							accesories: attributes.ACCESORIES,
 							weapon: attributes.WEAPON,
 							assetShoe: attributes.ASSETSHOE,
-							assetLayer: attributes.ASSETLASER,
+							assetLaser: attributes.ASSETLASER,
 							shoeSideColourGradient: attributes.SHOESIDECOLOURGRADIENT,
+							shoeSideColour: attributes.SHOESIDECOLOUR,
 							sNFTNumber: information.edition,
 							description: information.description,
 						}
