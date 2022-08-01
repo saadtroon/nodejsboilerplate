@@ -28,7 +28,7 @@ let options = {
 		onTimeout: false
 	}
 };
-const contract =  new web3.eth.Contract((abi), '0x5eD4A134362952240e861B0Bc29aeE9826FCa826',options)
+const contract =  new web3.eth.Contract((abi), '0x5526eaa9627715154AAe74ca28cF7E97D7EaEad4',options)
 
 
  exports.eventListener = 
