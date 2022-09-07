@@ -6,7 +6,8 @@ const ImagesModel = require("../models/ImagesModel");
 
 var glayerNumbers,gImage,gtime;
 
-let oneday = 86400000;
+// let oneday = 86400000;
+let oneday = 60000;
 var error = "";
 
 async function stichService(farm) {

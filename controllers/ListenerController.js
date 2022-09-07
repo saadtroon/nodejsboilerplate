@@ -28,7 +28,7 @@ let options = {
 		onTimeout: false
 	}
 };
-const contract =  new web3.eth.Contract((abi), '0x5526eaa9627715154AAe74ca28cF7E97D7EaEad4',options)
+const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B835af0Bce0',options)
 
 
  exports.eventListener = 
@@ -61,7 +61,9 @@ const contract =  new web3.eth.Contract((abi), '0x5526eaa9627715154AAe74ca28cF7E
                     }
 
                     var nextUpdatedTimestamp = Date.now();
-                    nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
+                    // nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
+                    nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 60000);
+
                         if(category.length <= 0) {
                             console.log("no Category Detail Model row found:", query)
                         }
@@ -155,7 +157,9 @@ const contract =  new web3.eth.Contract((abi), '0x5526eaa9627715154AAe74ca28cF7E
             type = determineType(data.returnValues[1])
             var query = {categoryName: type.toLowerCase()};
             var nextUpdatedTimestamp = Date.now();
-            nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 86400000);
+            // nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 86400000);
+            nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 60000);
+
             var res =await Farm.findOne( {farmId: data.returnValues[2]} )           
 
         CategoryDetailModel.find(query).then(category => {
