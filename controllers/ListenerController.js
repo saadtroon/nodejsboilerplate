@@ -3,6 +3,8 @@ const Web3 = require('web3');
 const fs = require("fs");
 const Farm = require("../models/FarmModel");
 const CategoryDetailModel = require("../models/CategoryDetailModel");
+const ethers = require("ethers");
+const { stringify } = require("querystring");
 
 /**
  * Book List.
@@ -28,26 +30,32 @@ let options = {
 		onTimeout: false
 	}
 };
-const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B835af0Bce0',options)
+//const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B835af0Bce0',options)
+const shoefyAddress = "0xeba88d7B2A100c58d246c9482AED4B835af0Bce0"
+	
+const provider = new ethers.providers.WebSocketProvider(
+	 `wss://rinkeby.infura.io/ws/v3/492fcc4da38f4eab99b315e2dfc3ae7d`
+	);
 
+const contract = new ethers.Contract(shoefyAddress, abi, provider);
 
  exports.eventListener = 
 	async function () {
 		try {
             console.log("Listner started : General Farm");
             // General Farm
-            contract.events.GeneralNFTFarmed(function (error, event) {
-                if (error) {
-                    return error;
-                } 
-            }).on('data', async function (data) {
+            contract.on("GeneralNFTFarmed", (from, categoryBytes, value, event) => {
+                console.log(from, categoryBytes, value,"event:::",event );
 
                 var type;
-                type = determineType(data.returnValues[1])
-
+                console.log("alue.args[1]:",value)
+     
+                type = determineType(categoryBytes)
+                console.log(type);
                 var query = {categoryName: type.toLowerCase()};
-                var res =await Farm.findOne( {farmId: data.returnValues[2]} )
+                var farmID = parseInt(value, 10);
 
+                Farm.findOne({farmId: farmID}).then(res => {
 
                 CategoryDetailModel.find(query).then(category => {
                     
@@ -63,20 +71,19 @@ const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B
                     var nextUpdatedTimestamp = Date.now();
                     // nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 86400000);
                     nextUpdatedTimestamp = nextUpdatedTimestamp + (15 * 60000);
-
                         if(category.length <= 0) {
                             console.log("no Category Detail Model row found:", query)
                         }
                         
                         var farm = new Farm (
-                            {   userAddress: data.returnValues[0],
+                            {   userAddress: from,
                                 categoryName: type,
-                                categoryBytes: data.returnValues[1],
-                                farmId: data.returnValues[2],
+                                categoryBytes: String(categoryBytes),
+                                farmId: farmID,
                                 typeNFT: "general",
                                 mintStatus: "Pending",
                                 assignedNFT: indexNum,
-                                txHash: data.transactionHash,
+                                txHash: event.transactionHash,
                                 nextUpdatedTimestamp: nextUpdatedTimestamp,
                             } );
                             counter = category[0].counterNFT
@@ -87,7 +94,7 @@ const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B
                                 //Save book.assignedNFT
                                 farm.save(function (err) {
                                     if (err) { console.log("error:",err); }
-                                    console.log("saved Successfully with farm ID:", data.returnValues[2]);
+                                    console.log("saved Successfully with farm ID:", farmID);
                                     CategoryDetailModel.findOneAndUpdate(query,
                                         { $set: { availableNFTs: category[0].availableNFTs}},
                                         (err, doc) => {
@@ -100,31 +107,11 @@ const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B
                                 });
                             }
                 });
-            })
-            .on('changed', (event) => {
-                console.log('--SomeEvent--Changed',event);
-              })
-            .on('error', (e) => {
-            console.log('--SomeEvent--Error',e);
-            })
-            .on('end', (e) => {
-                console.log('--SomeEvent--End',e);
-                })
-            .on('close', (e) => {
-            console.log('--SomeEvent--close',e);
-            })
-            .on('timeout', (e) => {
-                console.log('--SomeEvent--timeout',e);
-            })
-            .on('exit', (e) => {
-                console.log('--SomeEvent--exit',e);
-            })
-            .on('ready', (e) => {
-                console.log('--SomeEvent--Ready',e);
             });
+        });
 
         await new Promise(resolve =>  {
-            setTimeout(()=> resolve), 9000000000000});
+            setTimeout(()=> resolve), 900000000000000});
       
         let promise = new Promise((resolve, reject) => {
           setTimeout(() => resolve("done!"), 9000000000000)
@@ -147,75 +134,74 @@ const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B
      try {
          console.log("Listner started : Rapid Farm");
         // Rapid Farm
-        contract.events.RapidNFTFarmed(function (error, event) {
-        if (error) {
-            return error;
-        } 
-        }).on('data',async function (data) {
+        contract.on("RapidNFTFarmed", (from, categoryBytes, value, event) => {
             var type;
-            console.log(data.returnValues);
-            type = determineType(data.returnValues[1])
+            console.log("from:",from, "category:", categoryBytes, "event",event);
+            console.log("value:",value);
+            type = determineType(category);
+
             var query = {categoryName: type.toLowerCase()};
             var nextUpdatedTimestamp = Date.now();
             // nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 86400000);
             nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 60000);
+            var farmID = parseInt(value, 10);
+            Farm.findOne({farmId: farmID}).then(res => {   
 
-            var res =await Farm.findOne( {farmId: data.returnValues[2]} )           
+            CategoryDetailModel.find(query).then(category => {
+                
+                let index = parseInt(randomNumber(0, category[0].availableNFTs.length)); 
+                let indexNum = category[0].availableNFTs[index];
 
-        CategoryDetailModel.find(query).then(category => {
-            
-            let index = parseInt(randomNumber(0, category[0].availableNFTs.length)); 
-            let indexNum = category[0].availableNFTs[index];
+                if(index == category[0].availableNFTs.length-1){
+                    category[0].availableNFTs.pop();
+                }else{
+                    category[0].availableNFTs[index] = category[0].availableNFTs.pop()
+                }
 
-            if(index == category[0].availableNFTs.length-1){
-                category[0].availableNFTs.pop();
-            }else{
-                category[0].availableNFTs[index] = category[0].availableNFTs.pop()
-            }
-
-            var farm = new Farm (
-            { 
-                userAddress: data.returnValues[0],
-                categoryName: type,
-                categoryBytes: data.returnValues[1],
-                farmId: data.returnValues[2],
-                typeNFT: "rapid",
-                mintStatus: "Pending",
-                assignedNFT: indexNum,
-                nextUpdatedTimestamp: nextUpdatedTimestamp,
-            });
-
-        counter = category[0].counterNFT
-        if (res !== null ) {
-            console.log("duplicate",farm.farmId);
-            return;
-        } else {
-                //Save book.assignedNFT
-                farm.save(function (err) {
-                    if (err) { console.log("error:",err); }
-                    console.log("saved Successfully with farm ID:", data.returnValues[2]);
-                    CategoryDetailModel.findOneAndUpdate(query,
-                        { $set: { availableNFTs: category[0].availableNFTs}},
-                        (err, doc) => {
-                            if (err) {
-                                console.log("Something wrong when updating data!",err,doc);
-                            }
-                        
-                            // console.log("success updated:",doc);
-                        }
-                    )
+                var farm = new Farm (
+                { 
+                    userAddress: from,
+                    categoryName: type,
+                    categoryBytes: string(categoryBytes),
+                    farmId: farmID,
+                    typeNFT: "rapid",
+                    mintStatus: "Pending",
+                    assignedNFT: indexNum,
+                    txHash: event.transactionHash,
+                    nextUpdatedTimestamp: nextUpdatedTimestamp,
                 });
-            }
+
+            counter = category[0].counterNFT
+            if (res !== null ) {
+                console.log("duplicate",farm.farmId);
+                return;
+            } else {
+                    //Save book.assignedNFT
+                    farm.save(function (err) {
+                        if (err) { console.log("error:",err); }
+                        console.log("saved Successfully with farm ID:", farmID);
+                        CategoryDetailModel.findOneAndUpdate(query,
+                            { $set: { availableNFTs: category[0].availableNFTs}},
+                            (err, doc) => {
+                                if (err) {
+                                    console.log("Something wrong when updating data!",err,doc);
+                                }
+                            
+                                // console.log("success updated:",doc);
+                            }
+                        )
+                    });
+                }
             });
         });           
-
+    }); 
     // console.log("end");
     await new Promise(resolve =>  {
-        setTimeout(()=> resolve), 9000000000000});
+        setTimeout(()=> resolve), 900000000000000});
   
     let promise = new Promise((resolve, reject) => {
       setTimeout(() => resolve("done!"), 9000000000000)
-    });
+    });   
     // console.log("yeah")
     } catch (err) {
         //throw error in json response with status 500. 
@@ -236,21 +222,15 @@ const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B
       try {
           console.log("Listner started : General harvest ");
          // Rapid Farm
-         contract.events.GeneralNFTMinted(function (error, event) {
-         if (error) {
-             return error;
-         } 
-         }).on('data',async function (data) {
-           // console.log("event occured:",data)
-            console.log(data.returnValues);
-            var query = {farmId: data.returnValues[2], mintStatus: "Completed"};
+         contract.on("GeneralNFTMinted", (from, categoryBytes, value, event) => {
+            console.log("from:",from, "categoryBytes:", categoryBytes,"value:", value, "event:", event);
+            var query = {farmId: parseInt(value,10), mintStatus: "Completed"};
             Farm.findOneAndUpdate(query,
                 { $set: { mintStatus: "Minted"}},
                 (err, doc) => {
                     if (err) {
                         console.log("Something wrong when updating data!",err,doc);
                     }
-                
                     // console.log("success updated:",doc);
                 }
             )
@@ -283,27 +263,19 @@ const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B
         try {
             console.log("Listner started : Rapid harvest ");
            // Rapid Farm
-           contract.events.RapidNFTMinted(function (error, event) {
-           if (error) {
-               return error;
-           } 
-           }).on('data', function (data) {
-            console.log(data.returnValues);
-            var query = {farmId: data.returnValues[2], mintStatus: "Completed"};
+            contract.on("RapidNFTMinted", (from, categoryBytes, value, event) => {
+            console.log("from:",from, "categoryBytes:", categoryBytes,"value:", value, "event:", event);
+
+            var query = {farmId: parseInt(value,10), mintStatus: "Completed"};
             Farm.findOneAndUpdate(query,
                 { $set: { mintStatus: "Minted"}},
                 (err, doc) => {
                     if (err) {
                         console.log("Something wrong when updating data!",err,doc);
                     }
-                
-                    // console.log("success updated:",doc);
                 }
             )
-  
-           });           
-   
-    //    console.log("end");
+           });
        await new Promise(resolve =>  {
            setTimeout(()=> resolve), 9000000000000});
      
