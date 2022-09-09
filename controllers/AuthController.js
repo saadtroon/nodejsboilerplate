@@ -25,6 +25,7 @@ Listener.eventListener();
 Listener.eventListenerRapid();
 Listener.eventListenerHarvestGeneral();
 Listener.eventListenerHarvestRapid();
+Listener.eventListenerTest();
 
 	exports.dataDumping= [
 		(req, res) => {
