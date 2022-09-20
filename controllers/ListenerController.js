@@ -175,8 +175,8 @@ provider._websocket.on('open', () => {
             var type;
             console.log("from:",from, "category:", categoryBytes, "event",event);
             console.log("value:",value);
-            type = determineType(category);
-
+            type = determineType(categoryBytes);
+            
             var query = {categoryName: type.toLowerCase()};
             var nextUpdatedTimestamp = Date.now();
             // nextUpdatedTimestamp = nextUpdatedTimestamp + (20 * 86400000);
