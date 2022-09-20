@@ -38,7 +38,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             console.log("shoefy:",shoefy)
             query = { layerNum: 1, shoeType: shoeTypes,categoryName:shoefy[0].categoryName.toUpperCase(), imageName:shoefy[0].background}
-            
+                console.log("query:",query);
                 return await ImagesModel.find(query).then(async function(images) {
                     return images[0].image;
                 }, function(err) {

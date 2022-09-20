@@ -199,7 +199,7 @@ provider._websocket.on('open', () => {
                 { 
                     userAddress: from,
                     categoryName: type,
-                    categoryBytes: string(categoryBytes),
+                    categoryBytes: String(categoryBytes),
                     farmId: farmID,
                     typeNFT: "rapid",
                     mintStatus: "Pending",

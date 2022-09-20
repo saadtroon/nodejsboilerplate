@@ -18,6 +18,7 @@ const mythicdevilService = require("../services/mythicdevil");
 const mythicalienService = require("../services/mythicalien");
 const commonRapidService = require("../services/commonRapid");
 const uniqueRapidService = require("../services/uniqueRapid");
+const rareRapidService = require("../services/rareRapid");
 
 const signService = require("../services/sign");
 
