@@ -22,11 +22,11 @@ const rareRapidService = require("../services/rareRapid");
 
 const signService = require("../services/sign");
 
-Listener.eventListener();
-Listener.eventListenerRapid();
-Listener.eventListenerHarvestGeneral();
-Listener.eventListenerHarvestRapid();
-Listener.eventListenerTest();
+eventListener();
+eventListenerRapid();
+eventListenerHarvestGeneral();
+eventListenerHarvestRapid();
+eventListenerTest();
 
 	exports.dataDumping= [
 		(req, res) => {
