@@ -213,7 +213,7 @@ async function stichLayers(layerNum, shoeTypes, assignedNFT, baseImage) {
             }
             return baseImage;
         });
-        setGlobalValues(8, finalImage, 30);
+        setGlobalValues(9, finalImage, 30);
     }
 
     if (layerNum == 9) {
