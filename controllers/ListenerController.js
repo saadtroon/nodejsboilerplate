@@ -33,10 +33,10 @@ let options = {
 	}
 };
 //const contract =  new web3.eth.Contract((abi), '0xeba88d7B2A100c58d246c9482AED4B835af0Bce0',options)
-const shoefyAddress = "0xeba88d7B2A100c58d246c9482AED4B835af0Bce0"
+const shoefyAddress = process.env.shoefy_address
 	
 const provider = new ethers.providers.WebSocketProvider(
-	 `wss://eth-rinkeby.alchemyapi.io/v2/ehZggKRHAhQgRBeaSaRNKtqO9OlLrHqX`
+	 process.env.wsRPC
 	);
 let pingTimeout = null
 let keepAliveInterval = null
