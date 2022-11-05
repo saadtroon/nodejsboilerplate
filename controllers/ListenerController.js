@@ -65,10 +65,10 @@ provider._websocket.on('open', () => {
     console.log('The websocket connection was closed')
     clearInterval(keepAliveInterval)
     clearTimeout(pingTimeout)
-    Listener.eventListener();
-    Listener.eventListenerRapid();
-    Listener.eventListenerHarvestGeneral();
-    Listener.eventListenerHarvestRapid();
+    this.eventListener();
+    this.eventListenerHarvestGeneral();
+    this.eventListenerHarvestRapid();
+    this.eventListenerRapid();
   });
 
   provider._websocket.on('pong', () => {
